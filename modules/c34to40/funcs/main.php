@@ -283,6 +283,58 @@ function nv_fomat_dir( $dirname, &$contents )
 
 				$output_data = str_replace( '$db->sql_freeresult();', '//$xxx->closeCursor();', trim( $output_data ) );
 
+				if( preg_match( "/^\<\?php[\s\t\r\n]+\/\*\*[\s\t\r\n]+([^\#]+)[\s\t\r\n]+\*\/[\s\t\r\n]+/", $output_data, $m ) )
+				{
+					$new = str_replace( 'createdate', 'Createdate', $m[0] );
+					$new = str_replace( "@Project NUKEVIET\n", "@Project NUKEVIET 3.x\n", $new );
+					$new = str_replace( "Project NUKEVIET 3.0", "Project NUKEVIET 3.x", $new );
+					$new = str_replace( "Project NUKEVIET 3.1", "Project NUKEVIET 3.x", $new );
+					$new = str_replace( "Project NUKEVIET 3.2", "Project NUKEVIET 3.x", $new );
+					$new = str_replace( "Project NUKEVIET 3.3", "Project NUKEVIET 3.x", $new );
+					$new = str_replace( "Project NUKEVIET 3.4", "Project NUKEVIET 3.x", $new );
+					$new = str_replace( "2009 VINADES", "2014 VINADES", $new );
+					$new = str_replace( "2010 VINADES", "2014 VINADES", $new );
+					$new = str_replace( "2011 VINADES", "2014 VINADES", $new );
+					$new = str_replace( "2012 VINADES", "2014 VINADES", $new );
+					$new = str_replace( "2013 VINADES", "2014 VINADES", $new );
+
+					if( strpos( $new, '@Project NUKEVIET 3.x' ) AND strpos( $new, '* @Createdate' ) )
+					{
+						$new = str_replace( '@Project NUKEVIET 3.x', '@Project NUKEVIET 4.x', $new );
+						if( strpos( $new, '@Language' ) )
+						{
+							$new = str_replace( '* @Createdate', "* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)\n * @Createdate", $new );
+						}
+						else
+						{
+							$new = str_replace( '* @Createdate', "* @License GNU/GPL version 2 or any later version\n * @Createdate", $new );
+						}
+						$output_data = str_replace( $m[0], $new, $output_data );
+					}
+				}
+
+				if( preg_match( '/\/modules\/([a-zA-Z0-9\-\_]+)\/admin\.functions\.php$/', $dirname . '/' . $file ) )
+				{
+					if( ! file_exists( NV_ROOTDIR . '/' . $dirname . '/admin.menu.php' ) )
+					{
+						$array_sub_menu = array( );
+						if( preg_match_all( '/\$submenu\[\'([a-zA-Z0-9\-\_]+)\'][\s\t\r]*\=[\s\t\r]*\$lang_module\[\'([a-zA-Z0-9\-\_]+)\'][\s\t\r]*\;/', $output_data, $m ) )
+						{
+							foreach( $m[0] as $key => $value )
+							{
+								$array_sub_menu[] = trim( $value );
+								$output_data = str_replace( $value, '//' . $value, $output_data );
+							}
+							$c_menu_admin = "<?php\n\n";
+							$c_menu_admin .= NV_FILEHEAD;
+							$c_menu_admin .= "\n\nif( ! defined( 'NV_ADMIN' ) ) die( 'Stop!!!' );\n\n";
+							$c_menu_admin .= implode( "\n", $array_sub_menu );
+							$c_menu_admin .= "\n\n?>";
+							file_put_contents( NV_ROOTDIR . '/' . $dirname . '/admin.menu.php', trim( $c_menu_admin ), LOCK_EX );
+						}
+					}
+				}
+
 				// Loại bỏ khoảng trắng ()
 				$output_data = preg_replace( '/\([\s]+\)/', '()', $output_data );
 				$output_data = preg_replace( "/[ ]+/", " ", $output_data );
@@ -304,6 +356,80 @@ function nv_fomat_dir( $dirname, &$contents )
 				if( strpos( $output_data, '$db->sql_affectedrows()' ) )
 				{
 					$contents .= '--------------$db->sql_affectedrows()--------<br>';
+				}
+				if( preg_match( '/\/modules\/([a-zA-Z0-9\-\_]+)\/action\.php$/', $dirname . '/' . $file ) )
+				{
+					rename( NV_ROOTDIR . '/' . $dirname . '/' . $file, NV_ROOTDIR . '/' . $dirname . '/action_mysql.php' );
+				}
+
+			}
+			elseif( preg_match( '/^([a-zA-Z0-9\-\_\/\.]+)\.js$/', $file ) OR preg_match( '/^([a-zA-Z0-9\-\_\/\.]+)\.css/', $file ) )
+			{
+				$contents_file = file_get_contents( NV_ROOTDIR . '/' . $dirname . '/' . $file );
+				$output_data = trim( $contents_file );
+				if( preg_match( "/^\/\*\*[\s\t\r\n]+([^\#]+)[\s\t\r\n]+\*\/[\s\t\r\n]+/", $output_data, $m ) )
+				{
+					$new = str_replace( 'createdate', 'Createdate', $m[0] );
+					$new = str_replace( "@Project NUKEVIET\n", "@Project NUKEVIET 3.x\n", $new );
+					$new = str_replace( "Project NUKEVIET 3.0", "Project NUKEVIET 3.x", $new );
+					$new = str_replace( "Project NUKEVIET 3.1", "Project NUKEVIET 3.x", $new );
+					$new = str_replace( "Project NUKEVIET 3.2", "Project NUKEVIET 3.x", $new );
+					$new = str_replace( "Project NUKEVIET 3.3", "Project NUKEVIET 3.x", $new );
+					$new = str_replace( "Project NUKEVIET 3.4", "Project NUKEVIET 3.x", $new );
+					$new = str_replace( "2009 VINADES", "2014 VINADES", $new );
+					$new = str_replace( "2010 VINADES", "2014 VINADES", $new );
+					$new = str_replace( "2011 VINADES", "2014 VINADES", $new );
+					$new = str_replace( "2012 VINADES", "2014 VINADES", $new );
+					$new = str_replace( "2013 VINADES", "2014 VINADES", $new );
+					if( strpos( $new, '@Project NUKEVIET 3.x' ) AND strpos( $new, '* @Createdate' ) )
+					{
+						$new = str_replace( '@Project NUKEVIET 3.x', '@Project NUKEVIET 4.x', $new );
+						if( strpos( $new, '@Language' ) )
+						{
+							$new = str_replace( '* @Createdate', "* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)\n * @Createdate", $new );
+						}
+						else
+						{
+							$new = str_replace( '* @Createdate', "* @License GNU/GPL version 2 or any later version\n * @Createdate", $new );
+						}
+						$output_data = str_replace( $m[0], $new, $output_data );
+						$output_data = str_replace( $m[0], $new, $output_data );
+
+						if( $output_data != $contents_file )
+						{
+							file_put_contents( NV_ROOTDIR . '/' . $dirname . '/' . $file, trim( $output_data ), LOCK_EX );
+							$contents .= $dirname . '/' . $file . '--------------change--------<br>';
+						}
+						else
+						{
+							$contents .= $dirname . '/' . $file . '<br>';
+						}
+					}
+				}
+			}
+			elseif( preg_match( '/^([a-zA-Z0-9\-\_\/\.]+)\.tpl/', $file ) )
+			{
+				$contents_file = file_get_contents( NV_ROOTDIR . '/' . $dirname . '/' . $file );
+				$output_data = trim( $contents_file );
+				$output_data = str_replace( ' summary=""', '', $output_data );
+
+				$output_data = preg_replace( "/\<\!\-\- BEGIN\: ([a-zA-Z0-9\-\_\/]+) \-\-\>([\s\t\r\n]+)\<tbody([^\>]+)\>/", '<tbody>\\2<!-- BEGIN: \\1 -->', $output_data );
+				$output_data = preg_replace( "/\<\/tbody\>([\s\t\r\n]+)<\!\-\- END\: ([a-zA-Z0-9\-\_\/]+) \-\-\>/", '<!-- END: \\2 -->\\1<tbody>', $output_data );
+				$output_data = preg_replace( "/([\s\t\r\n]+)\<\/tbody\>([\s\t\r\n]+)\<tbody class\=\"second\"\>/", "", $output_data );
+				$output_data = preg_replace( "/([\s\t\r\n]+)\<\/tbody\>([\s\t\r\n]+)\<tbody\>/", "", $output_data );
+				$output_data = str_replace( '<tbody class="second">', '<tbody>', $output_data );
+
+				$output_data = preg_replace( "/\<\/tr>([\s\t\r\n]+)\<tbody\>/", '</tr>', $output_data );
+				$output_data = preg_replace( "/\<\/tbody>([\s\t\r\n]+)\<tr\>/", '<tr>', $output_data );
+				$output_data = trim( $output_data );
+				if( $output_data != $contents_file )
+				{
+					file_put_contents( NV_ROOTDIR . '/' . $dirname . '/' . $file, $output_data, LOCK_EX );
+					$contents .= $dirname . '/' . $file . '--------------change--------<br>';
+				}
+				else
+				{
+					$contents .= $dirname . '/' . $file . '<br>';
 				}
 			}
 			elseif( preg_match( "/^([a-zA-Z0-9\-\_\/]+)$/", $file ) and is_dir( NV_ROOTDIR . '/' . $dirname . '/' . $file ) )

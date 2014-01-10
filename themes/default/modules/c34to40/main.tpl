@@ -19,6 +19,11 @@ Nếu có điều kiện viết lại các đoạn code
 5) sử dụng PDOStatement::rowCount
 <br/>
 <br/>
+
+6) Nên thay thế   UNIX_TIMESTAMP() bằng biến NV_CURRENTTIME trong PHP
+<br/>
+<br/>
+
 {DATA}
 
 <!-- END: main -->
