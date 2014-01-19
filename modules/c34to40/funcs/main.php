@@ -335,6 +335,15 @@ function nv_fomat_dir( $dirname, &$contents )
 					}
 				}
 
+				$output_data = str_replace( "Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . \$module_name );", "Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . \$module_name );", $output_data );
+				$output_data = str_replace( 'Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );', "Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . \$module_name );", $output_data );
+
+				$output_data = str_replace( "NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . \$module_name . '&amp;", "NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . \$module_name . '&amp;", $output_data );
+				$output_data = str_replace( 'NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;', 'NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;', $output_data );
+
+				$output_data = str_replace( "NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . \$module_name", "NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . \$module_name", $output_data );
+				$output_data = str_replace( 'NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name', 'NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name', $output_data );
+
 				// Loại bỏ khoảng trắng ()
 				$output_data = preg_replace( '/\([\s]+\)/', '()', $output_data );
 				$output_data = preg_replace( "/[ ]+/", " ", $output_data );
