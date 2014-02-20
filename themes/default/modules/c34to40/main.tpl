@@ -13,7 +13,7 @@
 Nếu có điều kiện viết lại các đoạn code
 <br/>
 <br/>
-4) sử dụng SQL REPLACE, bởi Oracle không hỗ trợ REPLACE
+4) Không sử dụng SQL REPLACE, bởi Oracle không hỗ trợ REPLACE
 <br/>
 <br/>
 5) sử dụng PDOStatement::rowCount
