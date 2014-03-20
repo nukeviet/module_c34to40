@@ -100,7 +100,7 @@ function nv_fomat_dir( $dirname, &$contents )
 
 				$output_data = preg_replace( '/list\( \$([a-zA-Z0-9_]+) \) = \$([a-zA-Z0-9_]+)\-\>fetch\( 3 \)\;/', '$\\1 = $\\2->fetchColumn();', $output_data );
 
-				if( preg_match_all( "/filter\_text\_input\(([^\n]+)\)\;/", $output_data ) AND preg_match_all( "/filter\_text\_input\(([^\;|^\n]+)\)\;/", $output_data, $m ) )
+				if( preg_match_all( "/filter\_text\_input\(([^\n]+)\)\;/", $output_data, $m1 ) AND preg_match_all( "/filter\_text\_input\(([^\;|^\n]+)\)\;/", $output_data, $m ) )
 				{
 					foreach( $m[1] as $key => $string )
 					{
@@ -149,7 +149,7 @@ function nv_fomat_dir( $dirname, &$contents )
 					}
 				}
 
-				if( preg_match_all( "/filter\_text\_input\(([^\(]+)\)\,/", $output_data ) AND preg_match_all( "/filter\_text\_input\(([^\)]+)\)\,/", $output_data ) AND preg_match_all( "/filter\_text\_input\(([^\n]+)\)\,/", $output_data, $m ) )
+				if( preg_match_all( "/filter\_text\_input\(([^\(]+)\)\,/", $output_data, $m1 ) AND preg_match_all( "/filter\_text\_input\(([^\)]+)\)\,/", $output_data, $m2 ) AND preg_match_all( "/filter\_text\_input\(([^\n]+)\)\,/", $output_data, $m ) )
 				{
 					foreach( $m[1] as $key => $string )
 					{
@@ -198,7 +198,7 @@ function nv_fomat_dir( $dirname, &$contents )
 					}
 				}
 
-				if( preg_match_all( "/filter\_text\_input\(([^\(]+)\)\s\=\=\s/", $output_data ) AND preg_match_all( "/filter\_text\_input\(([^\)]+)\)\s\=\=\s/", $output_data ) AND preg_match_all( "/filter\_text\_input\(([^\=|^\n]+)\)\s\=\=\s/", $output_data, $m ) )
+				if( preg_match_all( "/filter\_text\_input\(([^\(]+)\)\s\=\=\s/", $output_data, $m1 ) AND preg_match_all( "/filter\_text\_input\(([^\)]+)\)\s\=\=\s/", $output_data, $m2 ) AND preg_match_all( "/filter\_text\_input\(([^\=|^\n]+)\)\s\=\=\s/", $output_data, $m ) )
 				{
 					foreach( $m[1] as $key => $string )
 					{
@@ -384,7 +384,6 @@ function nv_fomat_dir( $dirname, &$contents )
 				{
 					rename( NV_ROOTDIR . '/' . $dirname . '/' . $file, NV_ROOTDIR . '/' . $dirname . '/action_mysql.php' );
 				}
-
 			}
 			elseif( preg_match( '/^([a-zA-Z0-9\-\_\/\.]+)\.js$/', $file ) OR preg_match( '/^([a-zA-Z0-9\-\_\/\.]+)\.css/', $file ) )
 			{

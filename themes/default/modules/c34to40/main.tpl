@@ -24,7 +24,7 @@ Nếu có điều kiện viết lại các đoạn code
 <br/>
 <br/>
 
-8) Để module chạy được trên các loại CSDL khác cần bỏ dầu nháy ` trong các đoạn truy vấn CSDL 
+7) Để module chạy được trên các loại CSDL khác cần bỏ dầu nháy ` trong các đoạn truy vấn CSDL 
 <br/>
 <br/>
 
