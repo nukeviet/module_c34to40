@@ -8,21 +8,35 @@
  * @Createdate Thu, 09 Jan 2014 10:18:48 GMT
  */
 
-if( ! defined( 'NV_IS_MOD_C34TO40' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_IS_MOD_C34TO40' ) )	die( 'Stop!!!' );
 
 $page_title = $module_info['custom_title'];
 $key_words = $module_info['keywords'];
 
-$contents = '';
-if( is_dir( NV_ROOTDIR . '/tmp/module-nukeviet3.4' ) )
+$_check_exit = false;
+if( is_dir( NV_ROOTDIR . '/tmp/module-convert' ) )
 {
-	$contents = nv_fomat_dir( 'tmp/module-nukeviet3.4', $contents );
+	$modules_exit = nv_scandir( NV_ROOTDIR . '/tmp/module-convert/modules', $global_config['check_module'] );
+	foreach( $modules_exit as $mod_file )
+	{
+		$version_file = NV_ROOTDIR . '/tmp/module-convert/modules/' . $mod_file . '/version.php';
+		if( file_exists( $version_file ) )
+		{
+			$_check_exit = true;
+			break;
+		}
+	}
+}
+
+$contents = '';
+if( $_check_exit )
+{
+	$contents = nv_fomat_dir( 'tmp/module-convert', $contents );
 	$contents = nv_theme_c34to40_main( $contents );
 }
 else
 {
-	$contents = 'Bạn cần copy module nukeviet3.4 đã giải nén vào thư mục tmp/module-nukeviet3.4, sau đó chạy lại module này ';
+	$contents = 'Bạn cần copy module nukeviet3.4 đã giải nén vào thư mục <b>tmp/module-convert</b>, sau đó chạy lại module này<br><br>Ví dụ: Tôi nâng cấp module music, thì khi đó phải tồn tại file: tmp/module-convert/modules/music/version.php';
 }
 
 function nv_fomat_dir( $dirname, &$contents )
@@ -127,7 +141,7 @@ function nv_fomat_dir( $dirname, &$contents )
 						else
 						{
 							print_r( $value_arr );
-							die( $string );
+							die( '<H1> ERROR: </H1>' . $string );
 						}
 						$string_new = str_replace( "_get_post_", "get,post", $string_new );
 						$string_new = str_replace( "_post_get_", "get,post", $string_new );
@@ -176,7 +190,7 @@ function nv_fomat_dir( $dirname, &$contents )
 						else
 						{
 							print_r( $value_arr );
-							die( '---------' . $string );
+							die( '<H1> ERROR: </H1>' . $string );
 						}
 						$string_new = str_replace( "_get_post_", "get,post", $string_new );
 						$string_new = str_replace( "_post_get_", "get,post", $string_new );
@@ -225,7 +239,7 @@ function nv_fomat_dir( $dirname, &$contents )
 						else
 						{
 							print_r( $value_arr );
-							die( '----yyyyyyyy-----' . $string );
+							die( '<H1> ERROR: </H1>' . $string );
 						}
 						$string_new = str_replace( "_get_post_", "get,post", $string_new );
 						$string_new = str_replace( "_post_get_", "get,post", $string_new );
@@ -242,7 +256,7 @@ function nv_fomat_dir( $dirname, &$contents )
 						if( sizeof( $value_arr ) > 4 )
 						{
 							print_r( $m );
-							die( $string );
+							die( '<H1> ERROR: </H1>' . $string );
 						}
 						$string_new = '$nv_Request->get_textarea( ' . implode( ', ', $value_arr ) . ' );';
 						$output_data = str_replace( $m[0][$key], $string_new, $output_data );
@@ -259,7 +273,7 @@ function nv_fomat_dir( $dirname, &$contents )
 						if( sizeof( $value_arr ) > 4 )
 						{
 							print_r( $m );
-							die( $string );
+							die( '<H1> ERROR: </H1>' . $string );
 						}
 						$string_new = '$nv_Request->get_editor( ' . implode( ', ', $value_arr ) . ' );';
 						$output_data = str_replace( $m[0][$key], $string_new, $output_data );
@@ -268,17 +282,17 @@ function nv_fomat_dir( $dirname, &$contents )
 
 				if( strpos( $output_data, 'filter_text_input' ) )
 				{
-					die( $dirname . '/' . $file . '--------------ERROR: filter_text_input--------<br><br>' . $output_data );
+					die( '<H1> ERROR: </H1>' . $dirname . '/' . $file . '--------------ERROR: filter_text_input--------<br><br>' . $output_data );
 				}
 
 				if( strpos( $output_data, 'filter_text_textarea' ) )
 				{
-					die( $dirname . '/' . $file . '--------------ERROR: filter_text_textarea--------<br><br>' . $output_data );
+					die( '<H1> ERROR: </H1>' . $dirname . '/' . $file . '--------------ERROR: filter_text_textarea--------<br><br>' . $output_data );
 				}
 
 				if( strpos( $output_data, 'nv_editor_filter_textarea' ) )
 				{
-					die( $dirname . '/' . $file . '--------------ERROR: nv_editor_filter_textarea--------<br><br>' . $output_data );
+					die( '<H1> ERROR: </H1>' . $dirname . '/' . $file . '--------------ERROR: nv_editor_filter_textarea--------<br><br>' . $output_data );
 				}
 
 				$output_data = str_replace( '$db->sql_freeresult();', '//$xxx->closeCursor();', trim( $output_data ) );
@@ -453,4 +467,5 @@ function nv_fomat_dir( $dirname, &$contents )
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
+
 ?>

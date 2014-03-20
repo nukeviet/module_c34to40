@@ -20,7 +20,11 @@ Nếu có điều kiện viết lại các đoạn code
 <br/>
 <br/>
 
-6) Nên thay thế   UNIX_TIMESTAMP() bằng biến NV_CURRENTTIME trong PHP
+6) Nên thay thế  UNIX_TIMESTAMP() bằng biến NV_CURRENTTIME trong PHP
+<br/>
+<br/>
+
+8) Để module chạy được trên các loại CSDL khác cần bỏ dầu nháy ` trong các đoạn truy vấn CSDL 
 <br/>
 <br/>
 
