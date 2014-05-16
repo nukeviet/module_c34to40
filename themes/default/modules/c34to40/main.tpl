@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
 
-1) Cần kiểm tra lại tất cả các chỗ dùng SQL có câu lệnh: INSERT, UPDATE, DELETE: nếu câu lệnh nào cần xác định số kết quả trả về thì cần thay bằng thương thức PDO::exec
+1) Cần kiểm tra lại tất cả các chỗ dùng SQL có câu lệnh: INSERT, UPDATE, DELETE: nếu câu lệnh nào cần xác định số kết quả trả về thì nên thay bằng thương thức PDO::exec
 <br/>
 <br/>
 2) Kiểm tra lại tất cả các chỗ có //$xxx->closeCursor();, thay thế đúng bằng $result->closeCursor(); tùy theo các đoạn code viết bên trên
@@ -24,7 +24,7 @@ Nếu có điều kiện viết lại các đoạn code
 <br/>
 <br/>
 
-7) Để module chạy được trên các loại CSDL khác cần bỏ dầu nháy ` trong các đoạn truy vấn CSDL 
+7) Để module chạy được trên các loại CSDL khác cần bỏ dầu nháy ` trong các đoạn truy vấn CSDL
 <br/>
 <br/>
 
