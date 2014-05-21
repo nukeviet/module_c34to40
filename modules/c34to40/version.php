@@ -12,8 +12,8 @@ if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $module_version = array(
 		'name' => 'C34to40',
-		'modfuncs' => 'main',
-		'submenu' => 'main',
+		'modfuncs' => 'main,news',
+		'submenu' => 'main,news',
 		'is_sysmod' => 0,
 		'virtual' => 0,
 		'version' => '4.0.0',

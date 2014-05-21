@@ -44,7 +44,7 @@ function nv_fomat_dir( $dirname, &$contents )
 	$dh = opendir( NV_ROOTDIR . '/' . $dirname );
 	if( $dh )
 	{
-		while( ($file = readdir( $dh ) ) !== false )
+		while( ($file = readdir( $dh )) !== false )
 		{
 			if( preg_match( '/^([a-zA-Z0-9\-\_\/\.]+)\.php$/', $file ) )
 			{
@@ -663,3 +663,4 @@ function nv_fomat_dir( $dirname, &$contents )
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
+?>
