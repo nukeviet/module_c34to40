@@ -101,7 +101,7 @@ function nv_fomat_dir( $dirname, &$contents )
 				$output_data = preg_replace( '/list\(\s*\$([a-zA-Z0-9_]+)\s*\)\s*=\s*\$([a-zA-Z0-9_]+)\-\>fetch\(\s*3\s*\)\;/', '$\\1 = $\\2->fetchColumn();', $output_data );
 
 				//filter_text_input
-				if( preg_match_all( "/filter\_text\_input\(([^\n]+)\)\;/", $output_data, $m1 ) AND preg_match_all( "/filter\_text\_input\(([^\;|^\n]+)\)\;/", $output_data, $m ) )
+				if( preg_match_all( "/filter\_text\_input\(([^\n]+)\)\;/", $output_data, $m1 ) and preg_match_all( "/filter\_text\_input\(([^\;|^\n]+)\)\;/", $output_data, $m ) )
 				{
 					foreach( $m[1] as $key => $string )
 					{
@@ -150,7 +150,7 @@ function nv_fomat_dir( $dirname, &$contents )
 					}
 				}
 
-				if( preg_match_all( "/filter\_text\_input\(([^\(]+)\)\,/", $output_data, $m1 ) AND preg_match_all( "/filter\_text\_input\(([^\)]+)\)\,/", $output_data, $m2 ) AND preg_match_all( "/filter\_text\_input\(([^\n]+)\)\,/", $output_data, $m ) )
+				if( preg_match_all( "/filter\_text\_input\(([^\(]+)\)\,/", $output_data, $m1 ) and preg_match_all( "/filter\_text\_input\(([^\)]+)\)\,/", $output_data, $m2 ) and preg_match_all( "/filter\_text\_input\(([^\n]+)\)\,/", $output_data, $m ) )
 				{
 					foreach( $m[1] as $key => $string )
 					{
@@ -199,7 +199,7 @@ function nv_fomat_dir( $dirname, &$contents )
 					}
 				}
 
-				if( preg_match_all( "/filter\_text\_input\(([^\(]+)\)\s\=\=\s/", $output_data, $m1 ) AND preg_match_all( "/filter\_text\_input\(([^\)]+)\)\s\=\=\s/", $output_data, $m2 ) AND preg_match_all( "/filter\_text\_input\(([^\=|^\n]+)\)\s\=\=\s/", $output_data, $m ) )
+				if( preg_match_all( "/filter\_text\_input\(([^\(]+)\)\s\=\=\s/", $output_data, $m1 ) and preg_match_all( "/filter\_text\_input\(([^\)]+)\)\s\=\=\s/", $output_data, $m2 ) and preg_match_all( "/filter\_text\_input\(([^\=|^\n]+)\)\s\=\=\s/", $output_data, $m ) )
 				{
 					foreach( $m[1] as $key => $string )
 					{
@@ -248,7 +248,7 @@ function nv_fomat_dir( $dirname, &$contents )
 					}
 				}
 
-				if( preg_match_all( "/filter\_text\_input\(([^\n]+)\)\s*\/\//", $output_data, $m1 ) AND preg_match_all( "/filter\_text\_input\(([^\;|^\n]+)\)\s*\/\//", $output_data, $m ) )
+				if( preg_match_all( "/filter\_text\_input\(([^\n]+)\)\s*\/\//", $output_data, $m1 ) and preg_match_all( "/filter\_text\_input\(([^\;|^\n]+)\)\s*\/\//", $output_data, $m ) )
 				{
 					foreach( $m[1] as $key => $string )
 					{
@@ -297,7 +297,7 @@ function nv_fomat_dir( $dirname, &$contents )
 					}
 				}
 				//filter_text_textarea
-				if( preg_match_all( "/filter\_text\_textarea\(([^\n]+)\)\;/", $output_data, $m0 ) AND preg_match_all( "/filter\_text\_textarea\(([^\;]+)\)\;/", $output_data, $m ) )
+				if( preg_match_all( "/filter\_text\_textarea\(([^\n]+)\)\;/", $output_data, $m0 ) and preg_match_all( "/filter\_text\_textarea\(([^\;]+)\)\;/", $output_data, $m ) )
 				{
 					foreach( $m[1] as $key => $string )
 					{
@@ -314,7 +314,7 @@ function nv_fomat_dir( $dirname, &$contents )
 				}
 
 				//nv_editor_filter_textarea
-				if( preg_match_all( "/nv\_editor\_filter\_textarea\(([^\n]+)\)\;/", $output_data, $m0 ) AND preg_match_all( "/nv\_editor\_filter\_textarea\(([^\;]+)\)\;/", $output_data, $m ) )
+				if( preg_match_all( "/nv\_editor\_filter\_textarea\(([^\n]+)\)\;/", $output_data, $m0 ) and preg_match_all( "/nv\_editor\_filter\_textarea\(([^\;]+)\)\;/", $output_data, $m ) )
 				{
 					foreach( $m[1] as $key => $string )
 					{
@@ -362,7 +362,7 @@ function nv_fomat_dir( $dirname, &$contents )
 					$new = str_replace( "2012 VINADES", "2014 VINADES", $new );
 					$new = str_replace( "2013 VINADES", "2014 VINADES", $new );
 
-					if( strpos( $new, '@Project NUKEVIET 3.x' ) AND strpos( $new, '* @Createdate' ) )
+					if( strpos( $new, '@Project NUKEVIET 3.x' ) and strpos( $new, '* @Createdate' ) )
 					{
 						$new = str_replace( '@Project NUKEVIET 3.x', '@Project NUKEVIET 4.x', $new );
 						if( strpos( $new, '@Language' ) )
@@ -452,7 +452,7 @@ function nv_fomat_dir( $dirname, &$contents )
 					$new = str_replace( "2011 VINADES", "2014 VINADES", $new );
 					$new = str_replace( "2012 VINADES", "2014 VINADES", $new );
 					$new = str_replace( "2013 VINADES", "2014 VINADES", $new );
-					if( strpos( $new, '@Project NUKEVIET 3.x' ) AND strpos( $new, '* @Createdate' ) )
+					if( strpos( $new, '@Project NUKEVIET 3.x' ) and strpos( $new, '* @Createdate' ) )
 					{
 						$new = str_replace( '@Project NUKEVIET 3.x', '@Project NUKEVIET 4.x', $new );
 						if( strpos( $new, '@Language' ) )
@@ -538,7 +538,7 @@ function nv_fomat_dir( $dirname, &$contents )
 				{
 					foreach( $m[0] as $key => $value )
 					{
-						if( strpos( $value, 'type="text"' ) OR strpos( $value, 'type="password"' ) )
+						if( strpos( $value, 'type="text"' ) or strpos( $value, 'type="password"' ) )
 						{
 							if( !strpos( $value, 'form-control' ) )
 							{
@@ -553,7 +553,7 @@ function nv_fomat_dir( $dirname, &$contents )
 								$output_data = str_replace( $value, $value2, $output_data );
 							}
 						}
-						elseif( strpos( $value, 'type="submit"' ) AND strpos( $value, 'class="' ) === false )
+						elseif( strpos( $value, 'type="submit"' ) and strpos( $value, 'class="' ) === false )
 						{
 							$value2 = '<input class="btn btn-primary"' . $m[1][$key] . '>';
 							$output_data = str_replace( $value, $value2, $output_data );
