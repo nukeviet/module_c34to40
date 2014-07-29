@@ -39,6 +39,13 @@ else
 	$contents = 'Bạn cần copy module nukeviet3.4 đã giải nén vào thư mục <b>tmp/module-convert</b>, sau đó chạy lại module này<br><br>Ví dụ: Tôi nâng cấp module music, thì khi đó phải tồn tại file: tmp/module-convert/modules/music/version.php';
 }
 
+/**
+ * nv_fomat_dir()
+ * 
+ * @param mixed $dirname
+ * @param mixed $contents
+ * @return
+ */
 function nv_fomat_dir( $dirname, &$contents )
 {
 	$dh = opendir( NV_ROOTDIR . '/' . $dirname );
@@ -414,21 +421,23 @@ function nv_fomat_dir( $dirname, &$contents )
 				if( $output_data != $contents_file )
 				{
 					file_put_contents( NV_ROOTDIR . '/' . $dirname . '/' . $file, trim( $output_data ), LOCK_EX );
-					$contents .= $dirname . '/' . $file . '--------------change--------<br>';
+					$contents .= $dirname . '/' . $file . "--------------change--------\n";
 				}
 				else
 				{
-					$contents .= $dirname . '/' . $file . '<br>';
+					$contents .= $dirname . '/' . $file . "\n";
 				}
 
-				if( strpos( $output_data, '//$xxx->closeCursor()' ) )
+				if( strpos( $output_data, '//$xxx-&gt;closeCursor()' ) )
 				{
-					$contents .= '--------------//$xxx->closeCursor()--------<br>';
+					$contents .= "--------------//$xxx-&gt;closeCursor()--------\n";
 				}
-				if( strpos( $output_data, '$db->sql_affectedrows()' ) )
+				
+				if( strpos( $output_data, '$db-&gt;sql_affectedrows()' ) )
 				{
-					$contents .= '--------------$db->sql_affectedrows()--------<br>';
+					$contents .= "--------------$db-&gt;sql_affectedrows()--------\n";
 				}
+				
 				if( preg_match( '/\/modules\/([a-zA-Z0-9\-\_]+)\/action\.php$/', $dirname . '/' . $file ) )
 				{
 					rename( NV_ROOTDIR . '/' . $dirname . '/' . $file, NV_ROOTDIR . '/' . $dirname . '/action_mysql.php' );
@@ -438,6 +447,7 @@ function nv_fomat_dir( $dirname, &$contents )
 			{
 				$contents_file = file_get_contents( NV_ROOTDIR . '/' . $dirname . '/' . $file );
 				$output_data = trim( $contents_file );
+				
 				if( preg_match( "/^\/\*\*[\s\t\r\n]+([^\#]+)[\s\t\r\n]+\*\/[\s\t\r\n]+/", $output_data, $m ) )
 				{
 					$new = str_replace( 'createdate', 'Createdate', $m[0] );
@@ -452,9 +462,11 @@ function nv_fomat_dir( $dirname, &$contents )
 					$new = str_replace( "2011 VINADES", "2014 VINADES", $new );
 					$new = str_replace( "2012 VINADES", "2014 VINADES", $new );
 					$new = str_replace( "2013 VINADES", "2014 VINADES", $new );
+					
 					if( strpos( $new, '@Project NUKEVIET 3.x' ) and strpos( $new, '* @Createdate' ) )
 					{
 						$new = str_replace( '@Project NUKEVIET 3.x', '@Project NUKEVIET 4.x', $new );
+						
 						if( strpos( $new, '@Language' ) )
 						{
 							$new = str_replace( '* @Createdate', "* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)\n * @Createdate", $new );
@@ -463,6 +475,7 @@ function nv_fomat_dir( $dirname, &$contents )
 						{
 							$new = str_replace( '* @Createdate', "* @License GNU/GPL version 2 or any later version\n * @Createdate", $new );
 						}
+						
 						$output_data = str_replace( $m[0], $new, $output_data );
 						$output_data = str_replace( $m[0], $new, $output_data );
 						$output_data = trim( $output_data );
@@ -472,11 +485,11 @@ function nv_fomat_dir( $dirname, &$contents )
 						if( $output_data != $contents_file )
 						{
 							file_put_contents( NV_ROOTDIR . '/' . $dirname . '/' . $file, trim( $output_data ), LOCK_EX );
-							$contents .= $dirname . '/' . $file . '--------------change--------<br>';
+							$contents .= $dirname . '/' . $file . "--------------change--------\n";
 						}
 						else
 						{
-							$contents .= $dirname . '/' . $file . '<br>';
+							$contents .= $dirname . '/' . $file . "\n";
 						}
 					}
 				}
@@ -486,6 +499,7 @@ function nv_fomat_dir( $dirname, &$contents )
 				$contents_file = file_get_contents( NV_ROOTDIR . '/' . $dirname . '/' . $file );
 				$output_data = trim( $contents_file );
 				$output_data = str_replace( ' summary=""', '', $output_data );
+				$output_data = str_replace( 'nv_open_browse_file', 'nv_open_browse', $output_data );
 
 				$output_data = preg_replace( "/\<\!\-\- BEGIN\: ([a-zA-Z0-9\-\_\/]+) \-\-\>([\s\t\r\n]+)\<tbody([^\>]+)\>/", '<tbody>\\2<!-- BEGIN: \\1 -->', $output_data );
 				$output_data = preg_replace( "/\<\/tbody\>([\s\t\r\n]+)<\!\-\- END\: ([a-zA-Z0-9\-\_\/]+) \-\-\>/", '<!-- END: \\2 -->\\1<tbody>', $output_data );
@@ -641,14 +655,15 @@ function nv_fomat_dir( $dirname, &$contents )
 				$output_data = str_replace( 'class="form-control txt-full"', 'class="form-control"', $output_data );
 
 				$output_data = trim( $output_data );
+				
 				if( $output_data != $contents_file )
 				{
 					file_put_contents( NV_ROOTDIR . '/' . $dirname . '/' . $file, $output_data, LOCK_EX );
-					$contents .= $dirname . '/' . $file . '--------------change--------<br>';
+					$contents .= $dirname . '/' . $file . "--------------change--------\n";
 				}
 				else
 				{
-					$contents .= $dirname . '/' . $file . '<br>';
+					$contents .= $dirname . '/' . $file . "\n";
 				}
 			}
 			elseif( preg_match( "/^([a-zA-Z0-9\-\_\/]+)$/", $file ) and is_dir( NV_ROOTDIR . '/' . $dirname . '/' . $file ) )
@@ -657,10 +672,10 @@ function nv_fomat_dir( $dirname, &$contents )
 			}
 		}
 	}
+	
 	return $contents;
 }
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-?>
