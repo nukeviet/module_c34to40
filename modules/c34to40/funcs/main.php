@@ -41,7 +41,7 @@ else
 
 /**
  * nv_fomat_dir()
- * 
+ *
  * @param mixed $dirname
  * @param mixed $contents
  * @return
@@ -92,20 +92,20 @@ function nv_fomat_dir( $dirname, &$contents )
 				$output_data = preg_replace( '/list\(\s*\$([a-zA-Z0-9\_\[\]\']+)\s*\)\s*\=\s*\$db\-\>sql\_fetchrow\(\s*\$db\-\>query\(([^\;]+)\)\s*\)\;/', '$\\1 = $db->query(\\2)->fetchColumn();', $output_data );
 				$output_data = preg_replace( '/list\(\s*\$([a-zA-Z0-9\_\[\]\']+)\s*\) \= \$db\-\>sql\_fetchrow\(\s*\$db\-\>query\(([^\;]+)\)\, 1\s*\)\;/', '$\\1 = $db->query(\\2)->fetchColumn();', $output_data );
 				$output_data = preg_replace( '/list\(([a-zA-Z0-9\_\$\s\,\[\]\']+)\)\s*\=\s*\$db\-\>sql\_fetchrow\(\s*\$db\-\>query\(([^\;]+)\)\s*\)\;/', 'list(\\1) = $db->query(\\2)->fetch( 3 );', $output_data );
+				$output_data = preg_replace( '/list\(\s*\$([a-zA-Z0-9_]+)\s*\)\s*=\s*\$([a-zA-Z0-9_]+)\-\>fetch\(\s*3\s*\)\;/', '$\\1 = $\\2->fetchColumn();', $output_data );
 
 				$output_data = preg_replace( '/\$db\-\>sql\_fetchrow\(\s*\$([a-zA-Z0-9\_]+)\, 1\s*\)/', '$\\1->fetch( 3 )', $output_data );
 				$output_data = preg_replace( '/\$db\-\>sql\_fetchrow\(\s*\$([a-zA-Z0-9\_]+)\, 2\s*\)/', '$\\1->fetch()', $output_data );
 
+				$output_data = preg_replace( '/\$([a-zA-Z0-9\_]+)\s*\=\s*\$db\-\>sql\_fetchrow\s*\(\s*\$db\-\>query\s*\(([^\;]+)\)\s*\)\;/', '$\\1 = $db->query(\\2)->fetch();', $output_data );
+				$output_data = preg_replace( '/\$([a-zA-Z0-9\_]+)\s*\=\s*\$db\-\>sql\_fetchrow\s*\(\s*\$db\-\>query\s*\(([^\;]+)\)\s*,\s*2\s*\)\;/', '$\\1 = $db->query(\\2)->fetch();', $output_data );
+
 				//sql_freeresult
 				$output_data = preg_replace( '/\$db\-\>sql\_freeresult\(\s*\$([a-zA-Z0-9\_]+)\s*\)/', '$\\1->closeCursor()', $output_data );
-
-				$output_data = preg_replace( '/\$([a-zA-Z0-9\_]+)\s*\=\s*\$db\-\>sql\_fetchrow\(\s*\$db\-\>query\(([^\;]+)\)\s*\)\;/', '$\\1 = $db->query(\\2)->fetch();', $output_data );
 
 				$output_data = preg_replace( '/\$db\-\>sql\_numrows\(\s*\$([a-zA-Z0-9\_]+)\s*\)/', '$\\1->rowCount()', $output_data );
 				$output_data = preg_replace( '/\$db\-\>sql\_numrows\(\s*\$db\-\>query\(([^\;|\n]+)\)\s*\)\;/', '$db->query(\\1)->rowCount();', $output_data );
 				$output_data = preg_replace( '/\$db\-\>sql\_numrows\(\s*\$db\-\>query\(([^\n]+)\)\s*\) /', '$db->query(\\1)->rowCount() ', $output_data );
-
-				$output_data = preg_replace( '/list\(\s*\$([a-zA-Z0-9_]+)\s*\)\s*=\s*\$([a-zA-Z0-9_]+)\-\>fetch\(\s*3\s*\)\;/', '$\\1 = $\\2->fetchColumn();', $output_data );
 
 				//filter_text_input
 				if( preg_match_all( "/filter\_text\_input\(([^\n]+)\)\;/", $output_data, $m1 ) and preg_match_all( "/filter\_text\_input\(([^\;|^\n]+)\)\;/", $output_data, $m ) )
@@ -432,12 +432,12 @@ function nv_fomat_dir( $dirname, &$contents )
 				{
 					$contents .= "--------------//$xxx-&gt;closeCursor()--------\n";
 				}
-				
+
 				if( strpos( $output_data, '$db-&gt;sql_affectedrows()' ) )
 				{
 					$contents .= "--------------$db-&gt;sql_affectedrows()--------\n";
 				}
-				
+
 				if( preg_match( '/\/modules\/([a-zA-Z0-9\-\_]+)\/action\.php$/', $dirname . '/' . $file ) )
 				{
 					rename( NV_ROOTDIR . '/' . $dirname . '/' . $file, NV_ROOTDIR . '/' . $dirname . '/action_mysql.php' );
@@ -447,7 +447,7 @@ function nv_fomat_dir( $dirname, &$contents )
 			{
 				$contents_file = file_get_contents( NV_ROOTDIR . '/' . $dirname . '/' . $file );
 				$output_data = trim( $contents_file );
-				
+
 				if( preg_match( "/^\/\*\*[\s\t\r\n]+([^\#]+)[\s\t\r\n]+\*\/[\s\t\r\n]+/", $output_data, $m ) )
 				{
 					$new = str_replace( 'createdate', 'Createdate', $m[0] );
@@ -462,11 +462,11 @@ function nv_fomat_dir( $dirname, &$contents )
 					$new = str_replace( "2011 VINADES", "2014 VINADES", $new );
 					$new = str_replace( "2012 VINADES", "2014 VINADES", $new );
 					$new = str_replace( "2013 VINADES", "2014 VINADES", $new );
-					
+
 					if( strpos( $new, '@Project NUKEVIET 3.x' ) and strpos( $new, '* @Createdate' ) )
 					{
 						$new = str_replace( '@Project NUKEVIET 3.x', '@Project NUKEVIET 4.x', $new );
-						
+
 						if( strpos( $new, '@Language' ) )
 						{
 							$new = str_replace( '* @Createdate', "* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)\n * @Createdate", $new );
@@ -475,7 +475,7 @@ function nv_fomat_dir( $dirname, &$contents )
 						{
 							$new = str_replace( '* @Createdate', "* @License GNU/GPL version 2 or any later version\n * @Createdate", $new );
 						}
-						
+
 						$output_data = str_replace( $m[0], $new, $output_data );
 						$output_data = str_replace( $m[0], $new, $output_data );
 						$output_data = trim( $output_data );
@@ -655,7 +655,7 @@ function nv_fomat_dir( $dirname, &$contents )
 				$output_data = str_replace( 'class="form-control txt-full"', 'class="form-control"', $output_data );
 
 				$output_data = trim( $output_data );
-				
+
 				if( $output_data != $contents_file )
 				{
 					file_put_contents( NV_ROOTDIR . '/' . $dirname . '/' . $file, $output_data, LOCK_EX );
@@ -672,7 +672,7 @@ function nv_fomat_dir( $dirname, &$contents )
 			}
 		}
 	}
-	
+
 	return $contents;
 }
 
