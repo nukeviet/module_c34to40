@@ -16,7 +16,6 @@ Ví dụ:
 <br/>
 <pre>
 	<code class="language-javascript">
-
 function nv_del_content(id)
 {
     if(confirm(nv_is_del_confirm[0]))
@@ -43,13 +42,11 @@ function nv_del_content_result(res)
     }
     return false;
 }
-
 	</code>
 </pre>
 Cần được thay thành
 <pre>
 	<code class="language-javascript">
-
 function nv_del_content(id)
 {
     if(confirm(nv_is_del_confirm[0]))
@@ -74,7 +71,6 @@ function nv_del_content(id)
     return false;
 }
 	</code>
-
 </pre>
 
 <br/>
@@ -104,16 +100,16 @@ function nv_del_content(id)
 
 9) Chú ý đường dẫn trong admin. Ở phiên bản mới đã được thêm vào biến lang. Ví dụ
 <pre>
-	<code class="html">"{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}=upload&amp;popup=1&amp;area=logo&amp;path={IMG_DIR}&amp;type=image"</code>
+	<code class="language-html">"{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}=upload&amp;popup=1&amp;area=logo&amp;path={IMG_DIR}&amp;type=image"</code>
 </pre>
 Cần được thay thành
 <pre>
-	<code class="html">"{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}=upload&amp;popup=1&amp;area=logo&amp;path={IMG_DIR}&amp;type=image"</code>
+	<code class="language-html">"{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}=upload&amp;popup=1&amp;area=logo&amp;path={IMG_DIR}&amp;type=image"</code>
 </pre>
 
 <p><strong>Chi tiết các file được thay đổi:</strong></p>
 <pre>
-	<code class="xml">{DATA}</code>
+	<code class="language-xml">{DATA}</code>
 </pre>
 
 <!-- END: main -->
