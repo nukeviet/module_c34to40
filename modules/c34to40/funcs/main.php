@@ -418,6 +418,9 @@ function nv_fomat_dir( $dirname, &$contents )
 				// Loại bỏ khoảng trắng ()
 				$output_data = preg_replace( '/\([\s]+\)/', '()', $output_data );
 				
+				// Loại bỏ dấu nháy trong câu lệnh sql
+				$output_data = str_replace( '`', '', $output_data );
+				
 				// Xóa thẻ đóng php
 				$output_data = preg_replace( '/(\s*\?>\s*)\z$/', '', $output_data );
 
