@@ -367,6 +367,12 @@ if( $nv_Request->isset_request( 'mod_name', 'post' ) )
 								$array_insert['alias'] = $alias_i;
 								$array_insert['keyword'] = $keyword;
 								$tid = $db->insert_id( "INSERT INTO " . NV_PREFIXLANG . "_" . $mod_data . "_tags (numnews, alias, description, image, keywords) VALUES (1, :alias, '', '', :keyword)", "tid", $array_insert );
+								if( $tid > 0)
+								{
+									$sth = $db->prepare( 'INSERT INTO ' . NV_PREFIXLANG . '_' . $mod_data . '_tags_id (id, tid, keyword) VALUES (' . $item['id'] . ', ' . $tid . ', :keyword)' );
+									$sth->bindParam( ':keyword', $keyword, PDO::PARAM_STR );
+									$sth->execute();
+								}
 							}
 							else
 							{
@@ -391,9 +397,6 @@ if( $nv_Request->isset_request( 'mod_name', 'post' ) )
 								}
 								$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $mod_data . '_tags SET numnews = numnews+1 WHERE tid = ' . $tid );
 							}
-							$sth = $db->prepare( 'INSERT INTO ' . NV_PREFIXLANG . '_' . $mod_data . '_tags_id (id, tid, keyword) VALUES (' . $item['id'] . ', ' . $tid . ', :keyword)' );
-							$sth->bindParam( ':keyword', $keyword, PDO::PARAM_STR );
-							$sth->execute();
 						}
 					}
 				}
