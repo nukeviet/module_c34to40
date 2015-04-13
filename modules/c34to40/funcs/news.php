@@ -391,9 +391,10 @@ if( $nv_Request->isset_request( 'mod_name', 'post' ) )
 								}
 								$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $mod_data . '_tags SET numnews = numnews+1 WHERE tid = ' . $tid );
 							}
-							$sth = $db->prepare( 'INSERT INTO ' . NV_PREFIXLANG . '_' . $mod_data . '_tags_id (id, tid, keyword) VALUES (' . $item['id'] . ', ' . $tid . ', :keyword)' );
-							$sth->bindParam( ':keyword', $keyword, PDO::PARAM_STR );
-							$sth->execute();
+							$sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $mod_data . '_tags_id (id, tid, keyword) VALUES (' . $item['id'] . ', ' . $tid . ', :keyword)';
+							$data_insert = array();
+							$data_insert['keyword'] = $keyword;
+							$db->insert_id( $sql, 'id', $data_insert );
 						}
 					}
 				}
@@ -404,6 +405,67 @@ if( $nv_Request->isset_request( 'mod_name', 'post' ) )
 			die( $e->getMessage() );
 		}
 		$db->query( "INSERT " . NV_PREFIXLANG . "_" . $mod_data . "_bodytext (`id`, `bodytext`) SELECT `id`, `bodytext` FROM " . NV_PREFIXLANG3 . "_" . $mod_data3 . "_bodytext" );
+
+		// bảng nv3_vi_news_sources
+		$db->query( "TRUNCATE " . NV_PREFIXLANG . "_" . $mod_data . "_sources" );
+		$_sql = 'SELECT sourceid, title, link,logo,weight,add_time, edit_time FROM ' . NV_PREFIXLANG3 . '_' . $mod_data3 . '_sources';
+		$_query = $db->query( $_sql );
+
+		while( $row = $_query->fetch() )
+		{
+			$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $mod_data . "_sources( sourceid,title, link, logo, weight, add_time, edit_time)
+				VALUES (:sourceid,:title,:link,:logo,:weight,:add_time,:edit_time)";
+			$data_insert = array();
+			$data_insert['sourceid'] = $row['sourceid'];
+			$data_insert['title'] = $row['title'];
+			$data_insert['link'] = $row['link'];
+			$data_insert['logo'] = $row['logo'];
+			$data_insert['weight'] = $row['weight'];
+			$data_insert['add_time'] = $row['add_time'];
+			$data_insert['edit_time'] = $row['edit_time'];
+			$sourceid = intval( $db->insert_id( $sql, 'sourceid', $data_insert ) );
+		}
+
+		// bảng nv3_vi_news_block
+		$db->query( "TRUNCATE " . NV_PREFIXLANG . "_" . $mod_data . "_block" );
+		$_sql = 'SELECT bid, id, weight FROM ' . NV_PREFIXLANG3 . '_' . $mod_data3 . '_block';
+		$_query = $db->query( $_sql );
+
+		while( $row = $_query->fetch() )
+		{
+			$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $mod_data . "_block(bid, id, weight) VALUES (:bid,:id,:weight)";
+			$data_insert = array();
+			$data_insert['bid'] = $row['bid'];
+			$data_insert['id'] = $row['id'];
+			$data_insert['weight'] = $row['weight'];
+
+			$bid = intval( $db->insert_id( $sql, 'bid', $data_insert ) );
+		}
+
+		// bảng nv3_vi_news_block_cat
+		$db->query( "TRUNCATE " . NV_PREFIXLANG . "_" . $mod_data . "_block_cat" );
+		$_sql = 'SELECT bid, adddefault, number, title, alias, image, thumbnail, description, weight, keywords, add_time, edit_time FROM ' . NV_PREFIXLANG3 . '_' . $mod_data3 . '_block_cat';
+		$_query = $db->query( $_sql );
+
+		while( $row = $_query->fetch() )
+		{
+			$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $mod_data . "_block_cat(bid, adddefault, numbers, title, alias, image, description, weight, keywords, add_time, edit_time)
+				VALUES (:bid,:adddefault,:numbers,:title,:alias,:image,:description,:weight,:keywords,:add_time,:edit_time)";
+			$data_insert = array();
+			$data_insert['bid'] = $row['bid'];
+			$data_insert['adddefault'] = $row['adddefault'];
+			$data_insert['numbers'] = $row['number'];
+			$data_insert['title'] = $row['title'];
+			$data_insert['alias'] = $row['alias'];
+			$data_insert['image'] = $row['image'];
+			$data_insert['description'] = $row['description'];
+			$data_insert['weight'] = $row['weight'];
+			$data_insert['keywords'] = $row['keywords'];
+			$data_insert['add_time'] = $row['add_time'];
+			$data_insert['edit_time'] = $row['edit_time'];
+
+			$bid = intval( $db->insert_id( $sql, 'bid', $data_insert ) );
+		}
 
 		nv_del_moduleCache( $mod_name );
 		nv_insert_logs( NV_LANG_DATA, $mod_name, 'Convert', '', $admin_info['userid'] );
