@@ -3,14 +3,13 @@
 <b>Hướng dẫn thực hiện:</b>
 <br>
 <br>
-- Cài lại module news, để xoá các bài viết và chuyên mục đã có trước đó.
+- Cài lại module Download, để xoá các bài viết và chuyên mục đã có trước đó.
 <br>
 <br>
 - dùng phpmyadmin, hoặc các công cụ khác để import CSDL site NukeViet 3.4 vào cùng một CSDL với site chạy NukeViet 4
-(nếu đã import rồi thì bỏ qua bước này)
 <br>
 <br>
-- Copy các ảnh của module news cũ, Sang thư mục của module news đang sử dụng của NUkeViet 4
+- Copy các ảnh của module download cũ, Sang thư mục của module download đang sử dụng của NUkeViet 4
 <br>
 <br>
 - Sử dụng chức năng để chuyển đổi.
@@ -24,14 +23,14 @@
 		<label class="col-sm-4 control-label">Bảng dữ liệu NukeViet 3</label>
 		<div class="col-sm-20">
 			<select name="nv3_news" class="form-control">
-				<!-- BEGIN: nv3_news -->
-				<option value="{NV3_NEWS.module_data}">{NV3_NEWS.module_data} ({NV3_NEWS.custom_title})</option>
-				<!-- END: nv3_news -->
+				<!-- BEGIN: nv3_download -->
+				<option value="{NV3_DOWNLOAD.module_data}">{NV3_DOWNLOAD.title} (NV3_DOWNLOAD.custom_title)</option>
+				<!-- END: nv3_download -->
 			</select>
 		</div>
 	</div>
 	<div class="form-group">
-		<label class="col-sm-4 control-label">Module news trên NukeViet 4</label>
+		<label class="col-sm-4 control-label">Module download trên NukeViet 4</label>
 		<div class="col-sm-20">
 			<select name="mod_name" class="form-control">
 				<!-- BEGIN: mod_data -->
