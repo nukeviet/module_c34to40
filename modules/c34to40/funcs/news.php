@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
@@ -7,11 +6,11 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate Thu, 09 Jan 2014 10:18:48 GMT
  */
-
-if( !defined( 'NV_IS_MOD_C34TO40' ) ) die( 'Stop!!!' );
+if( !defined( 'NV_IS_MOD_C34TO40' ) )
+	die( 'Stop!!!' );
 
 include_once NV_ROOTDIR . '/includes/class/image.class.php';
-$typeflag = array();
+$typeflag = array( );
 $typeflag[1] = 'gif';
 $typeflag[2] = 'jpg';
 $typeflag[3] = 'png';
@@ -66,7 +65,6 @@ function nv_get_viewImage( $fileName )
 					}
 				}
 			}
-
 			$viewDir = NV_FILES_DIR;
 			if( !empty( $m[2] ) )
 			{
@@ -114,11 +112,10 @@ function nv_get_viewImage( $fileName )
 			{
 				$image->cropFromCenter( $thumb_width, $thumb_height );
 			}
-
 			$image->save( NV_ROOTDIR . '/' . $viewDir, $m[3] . $m[4], $thumb_config['thumb_quality'] );
 			$create_Image_info = $image->create_Image_info;
 			$error = $image->error;
-			$image->close();
+			$image->close( );
 			if( empty( $error ) )
 			{
 				return array(
@@ -146,36 +143,35 @@ if( $nv_Request->isset_request( 'mod_name', 'post' ) )
 	$mod_name = $nv_Request->get_string( 'mod_name', 'post' );
 	if( isset( $site_mods[$mod_name] ) )
 	{
+		$mod_name = $nv_Request->get_string( 'mod_name', 'post' );
+		$mod_data3 = $nv_Request->get_string( 'nv3_news', 'post' );
+
 		$mod_data = $site_mods[$mod_name]['module_data'];
 		define( 'NV_PREFIXLANG3', 'nv3_' . NV_LANG_DATA );
-		$mod_data3 = 'news';
 
 		// Xóa dữ liệu module hiện tại
 		try
 		{
 			$_query = $db->query( "SELECT `catid` FROM `" . NV_PREFIXLANG . "_" . $mod_data . "_cat` WHERE 1" );
-			while( $row = $_query->fetch() )
+			while( $row = $_query->fetch( ) )
 			{
 				$db->query( "DROP TABLE IF EXISTS `" . NV_PREFIXLANG . "_" . $mod_data . "_" . $row['catid'] . "`" );
 			}
-
 			$result = $db->query( 'SHOW TABLE STATUS LIKE ' . $db->quote( $db_config['prefix'] . '\_' . NV_LANG_DATA . '\_' . $mod_data . '\_bodyhtml\_%' ) );
-			while( $item = $result->fetch() )
+			while( $item = $result->fetch( ) )
 			{
 				$db->query( 'DROP TABLE IF EXISTS ' . $item['name'] );
 			}
-
 			$result = $db->query( 'SHOW TABLE STATUS LIKE ' . $db->quote( NV_PREFIXLANG . '\_' . $mod_data . '\_%' ) );
-			while( $item = $result->fetch() )
+			while( $item = $result->fetch( ) )
 			{
 				$db->query( 'TRUNCATE ' . $item['name'] );
 			}
 		}
 		catch( PDOException $e )
 		{
-			die( $e->getMessage() );
+			die( $e->getMessage( ) );
 		}
-
 		// Copy dữ liệu chủ đề
 		require_once NV_ROOTDIR . '/includes/action_' . $db->dbtype . '.php';
 		$error = 'OK';
@@ -186,7 +182,7 @@ if( $nv_Request->isset_request( 'mod_name', 'post' ) )
 			// Fetch Assoc
 			$_sql = 'SELECT * FROM ' . NV_PREFIXLANG3 . '_' . $mod_data3 . '_cat';
 			$_query = $db->query( $_sql );
-			while( $row = $_query->fetch() )
+			while( $row = $_query->fetch( ) )
 			{
 				if( $row['who_view'] == 1 )
 				{
@@ -201,17 +197,16 @@ if( $nv_Request->isset_request( 'mod_name', 'post' ) )
 					$groups_view = '6';
 				}
 				$db->query( "UPDATE " . NV_PREFIXLANG . "_" . $mod_data . "_cat SET `viewdescription` = 0, `newday` = 3, `groups_view` = " . $groups_view . " WHERE catid=" . $row['catid'] );
-
 				nv_copy_structure_table( NV_PREFIXLANG . '_' . $mod_data . '_' . $row['catid'], NV_PREFIXLANG . '_' . $mod_data . '_rows' );
 			}
 		}
 		catch( PDOException $e )
 		{
-			die( $e->getMessage() );
+			die( $e->getMessage( ) );
 		}
 		try
 		{
-			$array_thumb_config = array();
+			$array_thumb_config = array( );
 			$array_thumb_config[''] = array(
 				'did' => 0,
 				'dirname' => '',
@@ -221,9 +216,9 @@ if( $nv_Request->isset_request( 'mod_name', 'post' ) )
 				'thumb_height' => 150,
 				'thumb_quality' => 90,
 			);
-			$aray_table_bodyhtml = array();
+			$aray_table_bodyhtml = array( );
 			$_query = $db->query( 'SELECT * FROM ' . NV_PREFIXLANG3 . '_' . $mod_data3 . '_rows' );
-			while( $item = $_query->fetch() )
+			while( $item = $_query->fetch( ) )
 			{
 				$array_img = (!empty( $item['homeimgthumb'] )) ? explode( "|", $item['homeimgthumb'] ) : $array_img = array(
 					"",
@@ -285,7 +280,6 @@ if( $nv_Request->isset_request( 'mod_name', 'post' ) )
 							$item['homeimgfile'] = $homeimgfile;
 						}
 					}
-
 					$arrimg = nv_get_viewImage( NV_UPLOADS_DIR . '/' . $mod_name . '/' . $item['homeimgfile'] );
 					if( !empty( $arrimg ) )
 					{
@@ -297,11 +291,9 @@ if( $nv_Request->isset_request( 'mod_name', 'post' ) )
 					$item['homeimgfile'] = '';
 				}
 				$item['homeimgthumb'] = $homeimgthumb;
-
 				$stmt = $db->prepare( "INSERT INTO " . NV_PREFIXLANG . "_" . $mod_data . "_rows
 				(id, catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, status, publtime, exptime, archive, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, inhome, allowed_comm, allowed_rating, hitstotal, hitscm, total_rating, click_rating) VALUES
 				(:id,:catid,:listcatid,:topicid,:admin_id,:author,:sourceid,:addtime,:edittime,:status,:publtime,:exptime,:archive,:title,:alias,:hometext,:homeimgfile,:homeimgalt,:homeimgthumb,:inhome,:allowed_comm,:allowed_rating,:hitstotal,:hitscm,:total_rating,:click_rating)" );
-
 				$stmt->bindParam( ':id', $item['id'], PDO::PARAM_INT );
 				$stmt->bindParam( ':catid', $item['catid'], PDO::PARAM_INT );
 				$stmt->bindParam( ':listcatid', $item['listcatid'], PDO::PARAM_STR );
@@ -328,7 +320,7 @@ if( $nv_Request->isset_request( 'mod_name', 'post' ) )
 				$stmt->bindParam( ':hitscm', $item['hitscm'], PDO::PARAM_INT );
 				$stmt->bindParam( ':total_rating', $item['total_rating'], PDO::PARAM_INT );
 				$stmt->bindParam( ':click_rating', $item['click_rating'], PDO::PARAM_INT );
-				$ec = $stmt->execute();
+				$ec = $stmt->execute( );
 				if( $ec )
 				{
 					$tbhtml = ceil( $item['id'] / 2000 );
@@ -348,22 +340,19 @@ if( $nv_Request->isset_request( 'mod_name', 'post' ) )
 					$keywords = array_map( 'trim', $keywords );
 					$keywords = array_diff( $keywords, array( '' ) );
 					$keywords = array_unique( $keywords );
-
 					foreach( $keywords as $keyword )
 					{
 						if( !empty( $keyword ) )
 						{
 							$alias_i = ($module_config[$mod_name]['tags_alias']) ? change_alias( $keyword ) : str_replace( ' ', '-', $keyword );
-
 							$sth = $db->prepare( 'SELECT tid, alias, description, keywords FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_tags where alias= :alias OR FIND_IN_SET(:keyword, keywords)>0' );
 							$sth->bindParam( ':alias', $alias_i, PDO::PARAM_STR );
 							$sth->bindParam( ':keyword', $keyword, PDO::PARAM_STR );
-							$sth->execute();
-
+							$sth->execute( );
 							list( $tid, $alias, $keywords_i ) = $sth->fetch( 3 );
 							if( empty( $tid ) )
 							{
-								$array_insert = array();
+								$array_insert = array( );
 								$array_insert['alias'] = $alias_i;
 								$array_insert['keyword'] = $keyword;
 								$tid = $db->insert_id( "INSERT INTO " . NV_PREFIXLANG . "_" . $mod_data . "_tags (numnews, alias, description, image, keywords) VALUES (1, :alias, '', '', :keyword)", "tid", $array_insert );
@@ -386,13 +375,13 @@ if( $nv_Request->isset_request( 'mod_name', 'post' ) )
 									{
 										$sth = $db->prepare( 'UPDATE ' . NV_PREFIXLANG . '_' . $mod_data . '_tags SET keywords= :keywords WHERE tid =' . $tid );
 										$sth->bindParam( ':keywords', $keywords_i2, PDO::PARAM_STR );
-										$sth->execute();
+										$sth->execute( );
 									}
 								}
 								$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $mod_data . '_tags SET numnews = numnews+1 WHERE tid = ' . $tid );
 							}
 							$sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $mod_data . '_tags_id (id, tid, keyword) VALUES (' . $item['id'] . ', ' . $tid . ', :keyword)';
-							$data_insert = array();
+							$data_insert = array( );
 							$data_insert['keyword'] = $keyword;
 							$db->insert_id( $sql, 'id', $data_insert );
 						}
@@ -402,20 +391,18 @@ if( $nv_Request->isset_request( 'mod_name', 'post' ) )
 		}
 		catch( PDOException $e )
 		{
-			die( $e->getMessage() );
+			die( $e->getMessage( ) );
 		}
 		$db->query( "INSERT " . NV_PREFIXLANG . "_" . $mod_data . "_bodytext (`id`, `bodytext`) SELECT `id`, `bodytext` FROM " . NV_PREFIXLANG3 . "_" . $mod_data3 . "_bodytext" );
-
 		// bảng nv3_vi_news_sources
 		$db->query( "TRUNCATE " . NV_PREFIXLANG . "_" . $mod_data . "_sources" );
 		$_sql = 'SELECT sourceid, title, link,logo,weight,add_time, edit_time FROM ' . NV_PREFIXLANG3 . '_' . $mod_data3 . '_sources';
 		$_query = $db->query( $_sql );
-
-		while( $row = $_query->fetch() )
+		while( $row = $_query->fetch( ) )
 		{
 			$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $mod_data . "_sources( sourceid,title, link, logo, weight, add_time, edit_time)
 				VALUES (:sourceid,:title,:link,:logo,:weight,:add_time,:edit_time)";
-			$data_insert = array();
+			$data_insert = array( );
 			$data_insert['sourceid'] = $row['sourceid'];
 			$data_insert['title'] = $row['title'];
 			$data_insert['link'] = $row['link'];
@@ -425,33 +412,28 @@ if( $nv_Request->isset_request( 'mod_name', 'post' ) )
 			$data_insert['edit_time'] = $row['edit_time'];
 			$sourceid = intval( $db->insert_id( $sql, 'sourceid', $data_insert ) );
 		}
-
 		// bảng nv3_vi_news_block
 		$db->query( "TRUNCATE " . NV_PREFIXLANG . "_" . $mod_data . "_block" );
 		$_sql = 'SELECT bid, id, weight FROM ' . NV_PREFIXLANG3 . '_' . $mod_data3 . '_block';
 		$_query = $db->query( $_sql );
-
-		while( $row = $_query->fetch() )
+		while( $row = $_query->fetch( ) )
 		{
 			$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $mod_data . "_block(bid, id, weight) VALUES (:bid,:id,:weight)";
-			$data_insert = array();
+			$data_insert = array( );
 			$data_insert['bid'] = $row['bid'];
 			$data_insert['id'] = $row['id'];
 			$data_insert['weight'] = $row['weight'];
-
 			$bid = intval( $db->insert_id( $sql, 'bid', $data_insert ) );
 		}
-
 		// bảng nv3_vi_news_block_cat
 		$db->query( "TRUNCATE " . NV_PREFIXLANG . "_" . $mod_data . "_block_cat" );
 		$_sql = 'SELECT bid, adddefault, number, title, alias, image, thumbnail, description, weight, keywords, add_time, edit_time FROM ' . NV_PREFIXLANG3 . '_' . $mod_data3 . '_block_cat';
 		$_query = $db->query( $_sql );
-
-		while( $row = $_query->fetch() )
+		while( $row = $_query->fetch( ) )
 		{
 			$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $mod_data . "_block_cat(bid, adddefault, numbers, title, alias, image, description, weight, keywords, add_time, edit_time)
 				VALUES (:bid,:adddefault,:numbers,:title,:alias,:image,:description,:weight,:keywords,:add_time,:edit_time)";
-			$data_insert = array();
+			$data_insert = array( );
 			$data_insert['bid'] = $row['bid'];
 			$data_insert['adddefault'] = $row['adddefault'];
 			$data_insert['numbers'] = $row['number'];
@@ -463,18 +445,19 @@ if( $nv_Request->isset_request( 'mod_name', 'post' ) )
 			$data_insert['keywords'] = $row['keywords'];
 			$data_insert['add_time'] = $row['add_time'];
 			$data_insert['edit_time'] = $row['edit_time'];
-
 			$bid = intval( $db->insert_id( $sql, 'bid', $data_insert ) );
 		}
-
 		nv_del_moduleCache( $mod_name );
 		nv_insert_logs( NV_LANG_DATA, $mod_name, 'Convert', '', $admin_info['userid'] );
 		Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $mod_name, true ) );
-		die();
+		die( );
 	}
 }
 else
 {
+	$result = $db->query( 'SELECT title, module_data, custom_title FROM ' . NV3_PREFIX . '_' . NV_LANG_DATA . '_modules WHERE module_file="news"' );
+	$array_nv3_news = $result->fetchAll( );
+
 	$xtpl = new XTemplate( $op . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
@@ -492,10 +475,19 @@ else
 			$xtpl->parse( 'main.mod_data' );
 		}
 	}
+
+	if( !empty( $array_nv3_news ) )
+	{
+		foreach( $array_nv3_news as $nv3_news )
+		{
+			$xtpl->assign( 'NV3_NEWS', $nv3_news );
+			$xtpl->parse( 'main.nv3_news' );
+		}
+	}
+
 	$xtpl->parse( 'main' );
 	$contents = $xtpl->text( 'main' );
 }
-
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
