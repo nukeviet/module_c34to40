@@ -508,7 +508,7 @@ function nv_fomat_dir( $dirname, &$contents )
 				$output_data = str_replace( 'nv_open_browse_file', 'nv_open_browse', $output_data );
 
 				$output_data = preg_replace( "/\<\!\-\- BEGIN\: ([a-zA-Z0-9\-\_\/]+) \-\-\>([\s\t\r\n]+)\<tbody([^\>]+)\>/", '<tbody>\\2<!-- BEGIN: \\1 -->', $output_data );
-				$output_data = preg_replace( "/\<\/tbody\>([\s\t\r\n]+)<\!\-\- END\: ([a-zA-Z0-9\-\_\/]+) \-\-\>/", '<!-- END: \\2 -->\\1<tbody>', $output_data );
+				$output_data = preg_replace( "/\<\/tbody\>([\s\t\r\n]+)<\!\-\- END\: ([a-zA-Z0-9\-\_\/]+) \-\-\>/", '<!-- END: \\2 -->\\1</tbody>', $output_data );
 				$output_data = preg_replace( "/([\s\t\r\n]+)\<\/tbody\>([\s\t\r\n]+)\<tbody class\=\"second\"\>/", "", $output_data );
 				$output_data = preg_replace( "/([\s\t\r\n]+)\<\/tbody\>([\s\t\r\n]+)\<tbody\>/", "", $output_data );
 				$output_data = str_replace( '<tbody class="second">', '<tbody>', $output_data );
