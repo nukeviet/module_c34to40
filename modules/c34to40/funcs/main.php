@@ -300,11 +300,11 @@ function nv_fomat_dir($dirname, &$contents)
                 $output_data = str_replace('new PHPMailer();', 'new PHPMailer\PHPMailer\PHPMailer();', $output_data);
                 $output_data = str_replace('new Array2XML(', 'new NukeViet\Xml\Array2XML(', $output_data);
                 
-                $output_data = str_replace('nv_get_cache', '$nv_Cache->getItem(', $output_data);
-                $output_data = str_replace('nv_set_cache', '$nv_Cache->setItem(', $output_data);
-                $output_data = str_replace('nv_delete_all_cache', '$nv_Cache->delAll(', $output_data);
-                $output_data = str_replace('nv_del_moduleCache', '$nv_Cache->delMod(', $output_data);
-                $output_data = str_replace('nv_db_cache', '$nv_Cache->db(', $output_data);
+                $output_data = str_replace('nv_get_cache', '$nv_Cache->getItem', $output_data);
+                $output_data = str_replace('nv_set_cache', '$nv_Cache->setItem', $output_data);
+                $output_data = str_replace('nv_delete_all_cache', '$nv_Cache->delAll', $output_data);
+                $output_data = str_replace('nv_del_moduleCache', '$nv_Cache->delMod', $output_data);
+                $output_data = str_replace('nv_db_cache', '$nv_Cache->db', $output_data);
                 
                 if (strpos($output_data, 'filter_text_input')) {
                     die('<H1> ERROR: </H1>' . $dirname . '/' . $file . '--------------ERROR: filter_text_input--------<br><br>' . $output_data);
