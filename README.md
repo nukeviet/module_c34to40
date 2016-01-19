@@ -43,5 +43,6 @@ Các bước thực hiện:
 - Đợi đến khi nhận được thông báo thành công.
 
 ## Các thông tin khác:
+- Hướng dẫn nâng cấp module: https://github.com/nukeviet/module_c34to40/wiki/H%C6%B0%E1%BB%9Bng-d%E1%BA%ABn-n%C3%A2ng-c%E1%BA%A5p-module-NukeViet-3-l%C3%AAn-NukeViet-4
 - Thảo luận tại diễn đàn: http://forum.nukeviet.vn/viewtopic.php?f=173&t=35858
 - Thông báo lỗi: https://github.com/nukeviet/module_c34to40/issues
