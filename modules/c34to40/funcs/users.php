@@ -78,7 +78,7 @@ function c_user()
             $sql_i .= "ADD fax varchar(100) NOT NULL DEFAULT '',";
             $sql_i .= "ADD mobile varchar(100) NOT NULL DEFAULT ''";
             
-            if (!$db->exec($sql_i)) {
+            if (!$db->query($sql_i)) {
                 $err .= "Lỗi bảng " . NV4_PREFIX . "_users_info </br>";
             }
         }
@@ -148,7 +148,7 @@ function c_user()
                 $data_insert_info['mobile'] = $row['mobile'];
                 $userid_info = intval($db->insert_id($sql_info, 'userid', $data_insert_info));
             } else {
-                $err .= "Lỗi insert user </br>";
+                $err .= "Lỗi insert user: " . $userid . " </br>";
             }
         }
         
