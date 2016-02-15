@@ -21,7 +21,8 @@ define( 'NV4_PREFIX', $db_config['prefix'] );
  */
 function coppy_lang( )
 {
-
+	global $db_config, $db;
+	
 	$result = $db->query( "SHOW TABLE STATUS LIKE '" . $db_config['prefix'] . "\_%'" );
 	while( $item = $result->fetch( ) )
 	{
