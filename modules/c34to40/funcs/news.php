@@ -368,6 +368,29 @@ if ($nv_Request->isset_request('mod_name', 'post')) {
             $data_insert['edit_time'] = $row['edit_time'];
             $bid = intval($db->insert_id($sql, 'bid', $data_insert));
         }
+
+		// bảng nv3_vi_news_topics
+        $db->query("TRUNCATE " . NV_PREFIXLANG . "_" . $mod_data . "_topics");
+        
+        $_sql = 'SELECT * FROM ' . NV_PREFIXLANG3 . '_' . $mod_data3 . '_topics';
+        $_query = $db->query($_sql);
+        while ($row = $_query->fetch()) {
+            $sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $mod_data . "_topics
+            	(topicid, title, alias, image, description, weight, keywords, add_time, edit_time)
+				VALUES (:topicid,:title,:alias,:image,:description,:weight,:keywords,:add_time,:edit_time)";
+            $data_insert = array();
+            $data_insert['topicid'] = $row['topicid'];
+            $data_insert['title'] = $row['title'];
+            $data_insert['alias'] = $row['alias'];
+            $data_insert['image'] = $row['image'];
+            $data_insert['description'] = $row['description'];
+            $data_insert['weight'] = $row['weight'];
+            $data_insert['keywords'] = $row['keywords'];
+            $data_insert['add_time'] = $row['add_time'];
+            $data_insert['edit_time'] = $row['edit_time'];
+            $topicid = intval($db->insert_id($sql, 'topicid', $data_insert));
+        }
+
         $nv_Cache->delMod($mod_name);
         nv_insert_logs(NV_LANG_DATA, $mod_name, 'Convert', '', $admin_info['userid']);
         Header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $mod_name, true));

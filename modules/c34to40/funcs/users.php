@@ -91,17 +91,18 @@ function c_user()
         $_query = $db->query($_sql);
         
         while ($row = $_query->fetch()) {
-            $sql = "INSERT INTO " . NV4_PREFIX . "_users( userid, username, md5username, password,
+            $sql = "INSERT INTO " . NV4_PREFIX . "_users(userid, group_id, username, md5username, password,
                 email, first_name, last_name, gender, photo, birthday, sig,
                 regdate, question, answer, passlostkey, view_mail, remember,
                 in_groups, active, checknum, last_login, last_ip, last_agent,
                 last_openid, idsite)
-                VALUES (:userid, :username,:md5username,:password,:email,:first_name,:last_name,
+                VALUES (:userid,:group_id,:username,:md5username,:password,:email,:first_name,:last_name,
                 :gender,:photo,:birthday,:sig,:regdate,:question,:answer,
                 :passlostkey,:view_mail,:remember,:in_groups,:active,:checknum,:last_login,
                 :last_ip,:last_agent,:last_openid,:idsite)";
             $data_insert = array();
             $data_insert['userid'] = $row['userid'];
+            $data_insert['group_id'] = 0;
             $data_insert['username'] = $row['username'];
             $data_insert['md5username'] = nv_md5safe($row['username']);
             $data_insert['password'] = $row['password'];
