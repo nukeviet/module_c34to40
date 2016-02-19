@@ -392,7 +392,7 @@ if ($nv_Request->isset_request('mod_name', 'post')) {
         }
 
 		// bảng nv3_vi_news_comments
-        $db->query("TRUNCATE " . NV_PREFIXLANG . "_comment");
+        $db->query("DELETE FROM " . NV_PREFIXLANG . "_comment WHERE module=". $db->quote($mod_name));
         
         $_sql = 'SELECT * FROM ' . NV_PREFIXLANG3 . '_' . $mod_data3 . '_comments';
         $_query = $db->query($_sql);

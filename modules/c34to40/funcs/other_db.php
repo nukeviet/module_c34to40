@@ -21,7 +21,7 @@ $xtpl->assign('OP', $op);
 
 if ($nv_Request->isset_request('save', 'post')) {
     other();
-    del_nv3();
+    //del_nv3();
     $xtpl->assign('ERR', 'Thực hiện xong!');
 }
 $xtpl->parse('main');
