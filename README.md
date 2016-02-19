@@ -1,4 +1,4 @@
-# Hướng dẫn nâng cấp hệ thống từ NukeViet 3 lên NukeViet 4
+# Hướng dẫn nâng cấp hệ thống từ NukeViet 3 lên NukeViet 4 RC2
 
 Ở phiên bản NukeViet 4, nhân hệ thống thay đổi hoàn toàn so với NukeViet 3, do đó người dùng cần thay mới hoàn toàn code, không hỗ trợ nâng cấp module mà chỉ hỗ trợ chuyển đỗi dữ liệu các module hệ thống.
 

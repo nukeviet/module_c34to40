@@ -14,6 +14,10 @@ if( !defined( 'NV_SYSTEM' ) )
 define( 'NV3_PREFIX', 'nv3' );
 define( 'NV4_PREFIX', $db_config['prefix'] );
 
+if ($sys_info['allowed_set_time_limit']) {
+    set_time_limit(1200);
+}
+
 /**
  * coppy_lang()
  * Coppy các bảng dữ liệu tiếng việt, chuyển sang bảng tiếng anh, dữ liệu của bảng config
