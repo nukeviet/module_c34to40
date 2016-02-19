@@ -391,6 +391,35 @@ if ($nv_Request->isset_request('mod_name', 'post')) {
             $topicid = intval($db->insert_id($sql, 'topicid', $data_insert));
         }
 
+		// bảng nv3_vi_news_comments
+        $db->query("TRUNCATE " . NV_PREFIXLANG . "_comment");
+        
+        $_sql = 'SELECT * FROM ' . NV_PREFIXLANG3 . '_' . $mod_data3 . '_comments';
+        $_query = $db->query($_sql);
+        while ($row = $_query->fetch()) {
+            $sql = "INSERT INTO " . NV_PREFIXLANG . "_comment
+            (cid, module, area, id, pid, content, post_time, userid, post_name, post_email, post_ip, status, likes, dislikes) 
+            VALUES (:cid,:module,:area,:id,:pid,:content,:post_time,:userid,:post_name,:post_email,:post_ip,:status,:likes,:dislikes)";
+				
+            $data_insert = array();
+            $data_insert['cid'] = $row['cid'];
+            $data_insert['module'] = $mod_name;
+            $data_insert['area'] = $site_mods[$mod_name]['funcs']['detail']['func_id'];
+            $data_insert['id'] = $row['id'];
+            $data_insert['pid'] = 0;
+            $data_insert['content'] = $row['content'];
+            $data_insert['post_time'] = $row['post_time'];
+            $data_insert['userid'] = $row['userid'];
+            $data_insert['post_name'] = $row['post_name'];
+            $data_insert['post_email'] = $row['post_email'];
+            $data_insert['post_ip'] = $row['post_ip'];
+            $data_insert['status'] = $row['status'];
+            $data_insert['likes'] = 0;
+            $data_insert['dislikes'] = 0;
+            
+            $cid = intval($db->insert_id($sql, 'cid', $data_insert));
+        }
+
         $nv_Cache->delMod($mod_name);
         nv_insert_logs(NV_LANG_DATA, $mod_name, 'Convert', '', $admin_info['userid']);
         Header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $mod_name, true));
