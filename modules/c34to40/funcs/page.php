@@ -29,12 +29,35 @@ if( $nv_Request->isset_request( 'mod_name', 'post' ) )
 			while( $row = $_query->fetch( ) )
 			{
 				$db->query( "INSERT INTO " . NV_PREFIXLANG . "_" . $mod_data . "
-				(id, title, alias, bodytext, keywords, weight, admin_id, add_time, 
-				edit_time, status)
-		        SELECT id, title, alias, bodytext, keywords, weight, admin_id, add_time, 
-		        edit_time, status
-		        FROM " . NV_PREFIXLANG3 . "_" . $mod_data3 . " 
-		        WHERE id = " . $row['id'] );
+				(id, title, alias, image, imagealt,imageposition, description, bodytext, keywords, socialbutton, 
+				activecomm, layout_func, gid, weight, admin_id, add_time, edit_time, status)
+		        VALUES (:id,:title,:alias,:image,:imagealt,:imageposition,:description,:bodytext,:keywords,:socialbutton, 
+				:activecomm,:layout_func,:gid,:weight,:admin_id,:add_time,:edit_time,:status)");
+				
+				$data_insert = array();
+	            $data_insert['id'] = $row['id'];
+	            $data_insert['title'] = $row['title'];
+	            $data_insert['alias'] = $row['alias'];
+	            $data_insert['image'] = '';
+	            $data_insert['imagealt'] = '';
+	            $data_insert['imageposition'] = 0;
+	            $data_insert['description'] = '';
+	            $data_insert['bodytext'] = $row['bodytext'];
+	            $data_insert['keywords'] = $row['keywords'];
+	            $data_insert['socialbutton'] = 0;
+	            $data_insert['activecomm'] = 4;
+	            $data_insert['layout_func'] = '';
+	            $data_insert['gid'] = 0;
+	            $data_insert['weight'] = $row['weight'];
+	            $data_insert['admin_id'] = $row['admin_id'];
+	            $data_insert['add_time'] = $row['add_time'];
+	            $data_insert['edit_time'] = $row['edit_time'];
+	            $data_insert['status'] = $row['status'];
+	            
+	            $id = intval($db->insert_id($sql, 'id', $data_insert));
+				if(empty($id)){
+					echo 'Lỗi bài viết id:'.$row['id'];
+				}
 			}
 		}
 		catch( PDOException $e )
