@@ -13,6 +13,7 @@ Các bước thực hiện:
 - Truy cập đường dẫn http:/domain/c34to40/users/
 - Chọn module muốn nâng cấp (users), sau đó nhấn “Thực hiện nâng cấp”
 - Đợi đến khi nhận được thông báo thành công.
+- Chú ý: để đăng nhập được bằng tài khoản site cũ, bạn cần copy sitekey từ site cũ sang site mới
 
 ## 2. Nâng cấp dữ liệu module News (Tin tức)
 - Xóa hết tất cả dữ liệu module news hoặc module ảo của news (nếu có) (Có thể thực hiện thao tác “Cài lại”)
