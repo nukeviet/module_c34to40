@@ -91,7 +91,21 @@ if ($nv_Request->isset_request('mod_name', 'post')) {
                 } else {
                     $groups_download = '6';
                 }
-                $db->query("INSERT " . NV_PREFIXLANG . "_" . $mod_data . "_categories (id, parentid, title, alias, description, groups_view, groups_download, weight, status) SELECT id, parentid, title, alias, description, " . $groups_view . " , " . $groups_download . ", weight, status  FROM " . NV_PREFIXLANG3 . "_" . $mod_data3 . "_categories Where id = " . $row['id']);
+                $db->query("INSERT " . NV_PREFIXLANG . "_" . $mod_data . "_categories (id, parentid, title, alias, description, groups_view, groups_download, weight, status) 
+                		SELECT id, parentid, title, alias, description, " . $groups_view . " , " . $groups_download . ", weight, status  
+                		FROM " . NV_PREFIXLANG3 . "_" . $mod_data3 . "_categories Where id = " . $row['id']);
+				if($row['parentid'] !=0){
+					$_sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_categories WHERE id = ' . $row['parentid'];
+					$_query = $db->query( $_sql );
+					while( $_row = $_query->fetch() )
+					{
+						$_row['numsubcat']=$_row['numsubcat']+1;
+						$_row['subcatid']=($_row['subcatid']=='') ? $row['id'] : $_row['subcatid'].','.$row['id'];
+					  	$db->query("UPDATE " . NV_PREFIXLANG . "_" . $mod_data . "_categories
+								SET numsubcat= ".$_row['numsubcat'].", subcatid= ".$db->quote($_row['subcatid'])."
+								Where id = " . $_row['id']);
+					}
+				}
             }
         } catch (PDOException $e) {
             die($e->getMessage());
