@@ -63,17 +63,13 @@ function nv_file_table( $table )
 		$tmp = explode( '_', $field );
 		foreach( $lang_value as $lang_i )
 		{
-			if( !empty( $tmp[0] ) && !empty( $tmp[1] ) )
-			{
-				if( $tmp[0] == $lang_i )
-				{
-					$arrfield[] = array(
-						$tmp[0],
-						$tmp[1]
-					);
-					break;
-				}
-			}
+			  if (! empty($tmp[0]) && ! empty($tmp[1])) {
+                if ($tmp[0] == $lang_i) {
+                	$tmp[1]=(isset($tmp[2])) ? $tmp[1].'_'.$tmp[2] : $tmp[1];
+                    $arrfield[] = array( $tmp[0], $tmp[1] );
+                    break;
+                }
+            }
 		}
 	}
 	return $arrfield;

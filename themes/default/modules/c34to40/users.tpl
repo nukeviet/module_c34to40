@@ -10,7 +10,10 @@
 - Sử dụng chức năng để chuyển đổi.
 <br>
 <br>
-
+- Sau khi nâng cấp xong cần cập nhật lại sitekey cho site để có thể đăng nhập được,
+- Tìm đến file config.php của site NukeViet 3.4 copy sitekey và paste vào file config của site mới. 
+<br>
+<br>
 <form action="{NV_BASE_SITEURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post">
 	<input type="hidden" name="save"  value="1" />
 	<input type="hidden" name="id" value="{DATA.id}" />
