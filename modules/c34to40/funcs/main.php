@@ -440,6 +440,17 @@ function nv_fomat_dir($dirname, &$contents)
                         }
                     }
                 }
+                if (preg_match('/\/([a-zA-Z0-9\-\_]+)\/js$/', $dirname, $_mod) and preg_match('/^([a-zA-Z0-9\-\_\/\.]+)\.js$/', $file)) {
+                    $_mod_name = $_mod[1];
+                    if ($file == 'admin.js') {
+                        mkdir(NV_ROOTDIR . '/tmp/module-convert/themes/admin_default/js');
+                        rename(NV_ROOTDIR . '/' . $dirname . '/' . $file, NV_ROOTDIR . '/tmp/module-convert/themes/admin_default/js/' . $_mod_name . '.js');
+                    } elseif ($file == 'user.js') {
+                        mkdir(NV_ROOTDIR . '/tmp/module-convert/themes/default/js');
+                        rename(NV_ROOTDIR . '/' . $dirname . '/' . $file, NV_ROOTDIR . '/tmp/module-convert/themes/default/js/' . $_mod_name . '.js');
+                    }
+                }
+            
             } elseif (preg_match('/^([a-zA-Z0-9\-\_\/\.]+)\.tpl/', $file)) {
                 $contents_file = file_get_contents(NV_ROOTDIR . '/' . $dirname . '/' . $file);
                 $output_data = trim($contents_file);
