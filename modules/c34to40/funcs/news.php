@@ -118,20 +118,17 @@ if ($nv_Request->isset_request('mod_name', 'post')) {
     if (isset($site_mods[$mod_name])) {
         $mod_name = $nv_Request->get_string('mod_name', 'post');
         $mod_data3 = $nv_Request->get_string('nv3_news', 'post');
-        
+
         $mod_data = $site_mods[$mod_name]['module_data'];
         define('NV_PREFIXLANG3', 'nv3_' . NV_LANG_DATA);
-        
+
         // Xóa dữ liệu module hiện tại
         try {
             $_query = $db->query("SELECT `catid` FROM `" . NV_PREFIXLANG . "_" . $mod_data . "_cat` WHERE 1");
             while ($row = $_query->fetch()) {
                 $db->query("DROP TABLE IF EXISTS `" . NV_PREFIXLANG . "_" . $mod_data . "_" . $row['catid'] . "`");
             }
-            $result = $db->query('SHOW TABLE STATUS LIKE ' . $db->quote($db_config['prefix'] . '\_' . NV_LANG_DATA . '\_' . $mod_data . '\_bodyhtml\_%'));
-            while ($item = $result->fetch()) {
-                $db->query('DROP TABLE IF EXISTS ' . $item['name']);
-            }
+
             $result = $db->query('SHOW TABLE STATUS LIKE ' . $db->quote(NV_PREFIXLANG . '\_' . $mod_data . '\_%'));
             while ($item = $result->fetch()) {
                 $db->query('TRUNCATE ' . $item['name']);
@@ -174,7 +171,7 @@ if ($nv_Request->isset_request('mod_name', 'post')) {
                 'thumb_height' => 150,
                 'thumb_quality' => 90
             );
-            $aray_table_bodyhtml = array();
+
             $_query = $db->query('SELECT * FROM ' . NV_PREFIXLANG3 . '_' . $mod_data3 . '_rows');
             while ($item = $_query->fetch()) {
                 $array_img = (!empty($item['homeimgthumb'])) ? explode("|", $item['homeimgthumb']) : $array_img = array(
@@ -259,12 +256,6 @@ if ($nv_Request->isset_request('mod_name', 'post')) {
                 $stmt->bindParam(':click_rating', $item['click_rating'], PDO::PARAM_INT);
                 $ec = $stmt->execute();
                 if ($ec) {
-                    $tbhtml = ceil($item['id'] / 2000);
-                    if (!in_array($tbhtml, $aray_table_bodyhtml)) {
-                        $aray_table_bodyhtml[] = $tbhtml;
-                        $db->query("CREATE TABLE IF NOT EXISTS " . NV_PREFIXLANG . "_" . $mod_data . "_bodyhtml_" . $tbhtml . " (id int(11) unsigned NOT NULL, bodyhtml longtext NOT NULL, sourcetext varchar(255) NOT NULL default '', imgposition tinyint(1) NOT NULL default '1', copyright tinyint(1) NOT NULL default '0', allowed_send tinyint(1) NOT NULL default '0', allowed_print tinyint(1) NOT NULL default '0', allowed_save tinyint(1) NOT NULL default '0', gid mediumint(9) NOT NULL DEFAULT '0', PRIMARY KEY (id)) ENGINE=MyISAM");
-                        $db->query("INSERT " . NV_PREFIXLANG . "_" . $mod_data . "_bodyhtml_" . $tbhtml . " (`id`, `bodyhtml`, `sourcetext`, `imgposition`, `copyright`, `allowed_send`, `allowed_print`, `allowed_save`) SELECT `id`, `bodyhtml`, `sourcetext`, `imgposition`, `copyright`, `allowed_send`, `allowed_print`, `allowed_save` FROM " . NV_PREFIXLANG3 . "_" . $mod_data3 . "_bodyhtml_" . $tbhtml);
-                    }
                     $catids = explode(',', $item['listcatid']);
                     foreach ($catids as $catid) {
                         $db->exec('INSERT INTO ' . NV_PREFIXLANG . '_' . $mod_data . '_' . $catid . ' SELECT * FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_rows WHERE id=' . $item['id']);
@@ -317,7 +308,6 @@ if ($nv_Request->isset_request('mod_name', 'post')) {
         } catch (PDOException $e) {
             die($e->getMessage());
         }
-        $db->query("INSERT " . NV_PREFIXLANG . "_" . $mod_data . "_bodytext (`id`, `bodytext`) SELECT `id`, `bodytext` FROM " . NV_PREFIXLANG3 . "_" . $mod_data3 . "_bodytext");
         // bảng nv3_vi_news_sources
         $db->query("TRUNCATE " . NV_PREFIXLANG . "_" . $mod_data . "_sources");
         $_sql = 'SELECT sourceid, title, link,logo,weight,add_time, edit_time FROM ' . NV_PREFIXLANG3 . '_' . $mod_data3 . '_sources';
@@ -371,7 +361,7 @@ if ($nv_Request->isset_request('mod_name', 'post')) {
 
 		// bảng nv3_vi_news_topics
         $db->query("TRUNCATE " . NV_PREFIXLANG . "_" . $mod_data . "_topics");
-        
+
         $_sql = 'SELECT * FROM ' . NV_PREFIXLANG3 . '_' . $mod_data3 . '_topics';
         $_query = $db->query($_sql);
         while ($row = $_query->fetch()) {
@@ -393,14 +383,14 @@ if ($nv_Request->isset_request('mod_name', 'post')) {
 
 		// bảng nv3_vi_news_comments
         $db->query("DELETE FROM " . NV_PREFIXLANG . "_comment WHERE module=". $db->quote($mod_name));
-        
+
         $_sql = 'SELECT * FROM ' . NV_PREFIXLANG3 . '_' . $mod_data3 . '_comments';
         $_query = $db->query($_sql);
         while ($row = $_query->fetch()) {
             $sql = "INSERT INTO " . NV_PREFIXLANG . "_comment
-            (cid, module, area, id, pid, content, post_time, userid, post_name, post_email, post_ip, status, likes, dislikes) 
+            (cid, module, area, id, pid, content, post_time, userid, post_name, post_email, post_ip, status, likes, dislikes)
             VALUES (:cid,:module,:area,:id,:pid,:content,:post_time,:userid,:post_name,:post_email,:post_ip,:status,:likes,:dislikes)";
-				
+
             $data_insert = array();
             $data_insert['cid'] = $row['cid'];
             $data_insert['module'] = $mod_name;
@@ -416,8 +406,14 @@ if ($nv_Request->isset_request('mod_name', 'post')) {
             $data_insert['status'] = $row['status'];
             $data_insert['likes'] = 0;
             $data_insert['dislikes'] = 0;
-            
+
             $cid = intval($db->insert_id($sql, 'cid', $data_insert));
+        }
+
+        // Cập nhật nội dung chi tiêt.
+        $result = $db->query('SHOW TABLE STATUS LIKE ' . $db->quote(NV_PREFIXLANG3 . "_" . $mod_data3 . "_bodyhtml_%"));
+        while ($item = $result->fetch()) {
+            $db->query("INSERT " . NV_PREFIXLANG . "_" . $mod_data . "_detail (`id`, `bodyhtml`, `sourcetext`, `imgposition`, `copyright`, `allowed_send`, `allowed_print`, `allowed_save`) SELECT `id`, `bodyhtml`, `sourcetext`, `imgposition`, `copyright`, `allowed_send`, `allowed_print`, `allowed_save` FROM " . $item['name']);
         }
 
         $nv_Cache->delMod($mod_name);
@@ -428,7 +424,7 @@ if ($nv_Request->isset_request('mod_name', 'post')) {
 } else {
     $result = $db->query('SELECT title, module_data, custom_title FROM ' . NV3_PREFIX . '_' . NV_LANG_DATA . '_modules WHERE module_file="news"');
     $array_nv3_news = $result->fetchAll();
-    
+
     $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
@@ -436,7 +432,7 @@ if ($nv_Request->isset_request('mod_name', 'post')) {
     $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
     $xtpl->assign('MODULE_NAME', $module_name);
     $xtpl->assign('OP', $op);
-    
+
     foreach ($site_mods as $mod_name => $mod_data) {
         if ($mod_data['module_file'] == 'news') {
             $mod_data['value'] = $mod_name;
@@ -444,14 +440,14 @@ if ($nv_Request->isset_request('mod_name', 'post')) {
             $xtpl->parse('main.mod_data');
         }
     }
-    
+
     if (!empty($array_nv3_news)) {
         foreach ($array_nv3_news as $nv3_news) {
             $xtpl->assign('NV3_NEWS', $nv3_news);
             $xtpl->parse('main.nv3_news');
         }
     }
-    
+
     $xtpl->parse('main');
     $contents = $xtpl->text('main');
 }
