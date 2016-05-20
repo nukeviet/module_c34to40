@@ -10,16 +10,14 @@
 (nếu đã import rồi thì bỏ qua bước này)
 <br>
 <br>
-- Copy các ảnh của module news cũ, Sang thư mục của module news đang sử dụng của NUkeViet 4
+- Copy các ảnh của module news cũ, Sang thư mục của module news đang sử dụng của NukeViet 4
 <br>
 <br>
 - Sử dụng chức năng để chuyển đổi.
 <br>
 <br>
 
-<form class="form-horizontal" action="{NV_BASE_SITEURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post">
-	<input type="hidden" name="save"  value="1" />
-	<input type="hidden" name="id" value="{DATA.id}" />
+<form id="form-update" class="form-horizontal" action="{NV_BASE_SITEURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}&amp;" method="post">
 	<div class="form-group">
 		<label class="col-sm-4 control-label">Bảng dữ liệu NukeViet 3</label>
 		<div class="col-sm-20">
@@ -42,9 +40,48 @@
 	</div>
 	<div class="form-group">
 		<div class="col-sm-offset-2 col-sm-10">
-			<input name="import" type="submit" value="Thực hiện nâng cấp" class="btn btn-primary">
+			<button type="button" value="1" class="btn btn-primary" onclick="$(this).html('<i class=\'fa fa-spin fa-spinner\'></i> Đang thực hiện vui lòng đợi').prop('disabled', true);$('#form-update').submit()">Thực hiện nâng cấp</button>
 		</div>
 	</div>
 </form>
 
+<div id="update-result">
+    <div id="update-result-top"></div>
+</div>
+
+<script type="text/javascript">
+function controlRequest(ajurl) {
+    $.ajax({
+        url: ajurl,
+        dataType: 'json'
+    }).done(function(e) {
+        showMessage(e.message, e.class);
+        if (e.url != '') {
+            showMessage(e.urlmessage, '');
+            setTimeout(function(){
+                controlRequest(e.url)
+            }, 1000)
+        }
+        if (e.complete) {
+            showMessage('Tiến trình hoàn tất', 'text-success');
+            $('#form-update').find('select').prop('disabled', false);
+            $('#form-update').find('[type="button"]').prop('disabled', false).html('Thực hiện nâng cấp');
+        }
+    }).fail(function(e) {
+        showMessage('Lỗi AJAX', 'text-danger');
+    });
+}
+function showMessage(m, c) {
+    $('<p class="' + c + '" style="margin-bottom:0">&raquo; ' + m + '</p>').insertAfter('#update-result-top');
+}
+$(function(){
+    $('#form-update').submit(function(e){
+        e.preventDefault();
+        var data = $('#form-update').serialize();
+        $('#form-update').find('select').prop('disabled', true);
+        $('<p>Tiến trình bắt đầu chạy</p>').insertAfter('#update-result-top');
+        controlRequest($('#form-update').attr('action') + data);
+    });
+})
+</script>
 <!-- END: main -->
