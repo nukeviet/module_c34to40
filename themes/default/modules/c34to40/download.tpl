@@ -9,10 +9,13 @@
 - dùng phpmyadmin, hoặc các công cụ khác để import CSDL site NukeViet 3.4 vào cùng một CSDL với site chạy NukeViet 4
 <br>
 <br>
-- Copy các ảnh của module download cũ, Sang thư mục của module download đang sử dụng của NUkeViet 4
+- Copy thư mục upload của module download cũ, Sang thư mục của module download đang sử dụng của NukeViet 4
 <br>
 <br>
 - Sử dụng chức năng để chuyển đổi.
+<br>
+<br>
+- <em>Chú ý hệ thống chỉ chuyển đổi dữ liệu chủ đề, các file tải về, phần bình luận báo lỗi và file đợi duyệt, các thiết lập của module cần được đặt lại. Nếu không đặt sẽ mang giá trị mặc định khi cài đặt</em>.
 <br>
 <br>
 
@@ -24,7 +27,7 @@
 		<div class="col-sm-20">
 			<select name="nv3_news" class="form-control">
 				<!-- BEGIN: nv3_download -->
-				<option value="{NV3_DOWNLOAD.module_data}">{NV3_DOWNLOAD.title} (NV3_DOWNLOAD.custom_title)</option>
+				<option value="{NV3_DOWNLOAD.module_data}">{NV3_DOWNLOAD.title} ({NV3_DOWNLOAD.custom_title})</option>
 				<!-- END: nv3_download -->
 			</select>
 		</div>
