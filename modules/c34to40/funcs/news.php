@@ -32,7 +32,7 @@ $typeflag[16] = 'xbm';
 
 /**
  * nv_get_viewImage()
- * 
+ *
  * @param mixed $fileName
  * @return
  */
@@ -121,7 +121,7 @@ function nv_get_viewImage($fileName)
 
 /**
  * ajax_respon()
- * 
+ *
  * @param mixed $message
  * @param string $class
  * @param string $url
@@ -147,14 +147,14 @@ if ($nv_Request->isset_request('mod_name', 'post,get')) {
     $mod_data3 = $nv_Request->get_string('nv3_news', 'post,get', '');
     $runstep = $nv_Request->get_int('runstep', 'post,get', 0);
     $runoffset = $nv_Request->get_int('runoffset', 'post,get', 0);
-    
+
     $nexturl = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
     $nexturl .= '&mod_name=' . $mod_name;
     $nexturl .= '&nv3_news=' . $mod_data3;
-    
+
     if (isset($site_mods[$mod_name])) {
         $mod_data = $site_mods[$mod_name]['module_data'];
-        define('NV_PREFIXLANG3', 'nv3_' . NV_LANG_DATA);
+        define('NV_PREFIXLANG3', NV3_PREFIX . '_' . NV_LANG_DATA);
 
         // Bước 1: Xóa dữ liệu module
         if ($runstep == 0) {
@@ -164,7 +164,7 @@ if ($nv_Request->isset_request('mod_name', 'post,get')) {
                 while ($row = $_query->fetch()) {
                     $db->query("DROP TABLE IF EXISTS " . NV_PREFIXLANG . "_" . $mod_data . "_" . $row['catid'] . "");
                 }
-    
+
                 $result = $db->query('SHOW TABLE STATUS LIKE ' . $db->quote(NV_PREFIXLANG . '\_' . $mod_data . '\_%'));
                 while ($item = $result->fetch()) {
                     $db->query('TRUNCATE ' . $item['name']);
@@ -172,7 +172,7 @@ if ($nv_Request->isset_request('mod_name', 'post,get')) {
             } catch (PDOException $e) {
                 ajax_respon('Lỗi xóa dữ liệu module', 'text-danger');
             }
-            
+
             $nexturl .= '&runstep=1';
             ajax_respon('Xóa dữ liệu module thành công', 'text-success', $nexturl, 'Copy dữ liệu chủ đề');
         } elseif ($runstep == 1) {
@@ -181,14 +181,14 @@ if ($nv_Request->isset_request('mod_name', 'post,get')) {
 
             try {
                 $db->query("INSERT " . NV_PREFIXLANG . "_" . $mod_data . "_cat (
-                    catid, parentid, title, titlesite, alias, description, image, weight, sort, lev, viewcat, numsubcat, subcatid, inhome, numlinks, keywords, 
+                    catid, parentid, title, titlesite, alias, description, image, weight, sort, lev, viewcat, numsubcat, subcatid, inhome, numlinks, keywords,
                     admins, add_time, edit_time, groups_view
-                ) SELECT catid, parentid, title, titlesite, alias, description, image, weight, `order`, lev, viewcat, numsubcat, subcatid, inhome, numlinks, keywords, 
+                ) SELECT catid, parentid, title, titlesite, alias, description, image, weight, `order`, lev, viewcat, numsubcat, subcatid, inhome, numlinks, keywords,
                 admins, add_time, edit_time, groups_view FROM " . NV_PREFIXLANG3 . "_" . $mod_data3 . "_cat");
-                
-                $db->query("INSERT " . NV_PREFIXLANG . "_" . $mod_data . "_admins ( userid, catid, admin, add_content, pub_content, edit_content, del_content) 
+
+                $db->query("INSERT " . NV_PREFIXLANG . "_" . $mod_data . "_admins ( userid, catid, admin, add_content, pub_content, edit_content, del_content)
                 SELECT  userid, catid, admin, add_content, pub_content, edit_content, del_content FROM " . NV_PREFIXLANG3 . "_" . $mod_data3 . "_admins");
-                
+
                 // Fetch Assoc
                 $_sql = 'SELECT * FROM ' . NV_PREFIXLANG3 . '_' . $mod_data3 . '_cat';
                 $_query = $db->query($_sql);
@@ -207,12 +207,12 @@ if ($nv_Request->isset_request('mod_name', 'post,get')) {
             } catch (PDOException $e) {
                 ajax_respon('Lỗi copy dữ liệu chủ đề: ' . $e->getMessage(), 'text-danger');
             }
-            
+
             $nexturl .= '&runstep=2';
             ajax_respon('Thành công', 'text-success', $nexturl, 'Copy dữ liệu bài viết');
         } elseif ($runstep == 2) {
             $limit_row = 2000;
-            
+
             // Copy dữ liệu bài viết
             try {
                 $array_thumb_config = array();
@@ -225,16 +225,16 @@ if ($nv_Request->isset_request('mod_name', 'post,get')) {
                     'thumb_height' => 150,
                     'thumb_quality' => 90
                 );
-                
+
                 $db->sqlreset()->select('*')->from(NV_PREFIXLANG3 . '_' . $mod_data3 . '_rows')->order('id ASC')->limit($limit_row)->offset($runoffset);
                 $sql = $db->sql();
                 $result = $db->query($sql);
                 $num_rows = $result->rowCount();
-                
+
                 while ($item = $result->fetch()) {
                     $array_img = (!empty($item['homeimgthumb'])) ? explode("|", $item['homeimgthumb']) : $array_img = array("", "");
                     $homeimgthumb = 0;
-                    
+
                     if ($item['homeimgfile'] != "" and file_exists(NV_UPLOADS_REAL_DIR . '/' . $mod_name . '/' . $item['homeimgfile']) and $array_img[0] != "" and file_exists(NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $mod_name . '/' . $array_img[0])) {
                         $path = dirname($item['homeimgfile']);
                         if (!empty($path)) {
@@ -280,17 +280,17 @@ if ($nv_Request->isset_request('mod_name', 'post,get')) {
                     } else {
                         $item['homeimgfile'] = '';
                     }
-                    
+
                     $item['homeimgthumb'] = $homeimgthumb;
                     $stmt = $db->prepare("INSERT INTO " . NV_PREFIXLANG . "_" . $mod_data . "_rows (
-                        id, catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, status, publtime, 
-                        exptime, archive, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, inhome, allowed_comm, 
+                        id, catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, status, publtime,
+                        exptime, archive, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, inhome, allowed_comm,
                         allowed_rating, hitstotal, hitscm, total_rating, click_rating
                     ) VALUES (
                         :id,:catid,:listcatid,:topicid,:admin_id,:author,:sourceid,:addtime,:edittime,:status,:publtime,:exptime,:archive,:title,
                         :alias,:hometext,:homeimgfile,:homeimgalt,:homeimgthumb,:inhome,:allowed_comm,:allowed_rating,:hitstotal,:hitscm,:total_rating,:click_rating
                     )");
-                    
+
                     $stmt->bindParam(':id', $item['id'], PDO::PARAM_INT);
                     $stmt->bindParam(':catid', $item['catid'], PDO::PARAM_INT);
                     $stmt->bindParam(':listcatid', $item['listcatid'], PDO::PARAM_STR);
@@ -317,23 +317,23 @@ if ($nv_Request->isset_request('mod_name', 'post,get')) {
                     $stmt->bindParam(':hitscm', $item['hitscm'], PDO::PARAM_INT);
                     $stmt->bindParam(':total_rating', $item['total_rating'], PDO::PARAM_INT);
                     $stmt->bindParam(':click_rating', $item['click_rating'], PDO::PARAM_INT);
-                    
+
                     $ec = $stmt->execute();
-                    
+
                     if ($ec) {
                         $catids = explode(',', $item['listcatid']);
-                        
+
                         foreach ($catids as $catid) {
-                            $db->exec('INSERT INTO ' . NV_PREFIXLANG . '_' . $mod_data . '_' . $catid . ' SELECT * FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_rows WHERE 
+                            $db->exec('INSERT INTO ' . NV_PREFIXLANG . '_' . $mod_data . '_' . $catid . ' SELECT * FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_rows WHERE
                             id=' . $item['id']);
                         }
-                        
+
                         $keywords = explode(',', nv_strtolower($item['keywords']));
                         $keywords = array_map('strip_punctuation', $keywords);
                         $keywords = array_map('trim', $keywords);
                         $keywords = array_diff($keywords, array(''));
                         $keywords = array_unique($keywords);
-                        
+
                         foreach ($keywords as $keyword) {
                             if (!empty($keyword)) {
                                 $alias_i = ($module_config[$mod_name]['tags_alias']) ? change_alias($keyword) : str_replace(' ', '-', $keyword);
@@ -375,7 +375,7 @@ if ($nv_Request->isset_request('mod_name', 'post,get')) {
             } catch (PDOException $e) {
                 ajax_respon('Lỗi copy bài viết', 'text-danger');
             }
-            
+
             if ($num_rows < $limit_row) {
                 $nexturl .= '&runstep=3';
                 ajax_respon('Thành công', 'text-success', $nexturl, 'Copy nguồn tin');
@@ -402,7 +402,7 @@ if ($nv_Request->isset_request('mod_name', 'post,get')) {
                 $data_insert['edit_time'] = $row['edit_time'];
                 $sourceid = intval($db->insert_id($sql, 'sourceid', $data_insert));
             }
-            
+
             $nexturl .= '&runstep=4';
             ajax_respon('Thành công', 'text-success', $nexturl, 'Copy dữ liệu các nhóm tin cho bài viết');
         } elseif ($runstep == 4) {
@@ -418,7 +418,7 @@ if ($nv_Request->isset_request('mod_name', 'post,get')) {
                 $data_insert['weight'] = $row['weight'];
                 $bid = intval($db->insert_id($sql, 'bid', $data_insert));
             }
-            
+
             $nexturl .= '&runstep=5';
             ajax_respon('Thành công', 'text-success', $nexturl, 'Copy các nhóm tin');
         } elseif ($runstep == 5) {
@@ -443,13 +443,13 @@ if ($nv_Request->isset_request('mod_name', 'post,get')) {
                 $data_insert['edit_time'] = $row['edit_time'];
                 $bid = intval($db->insert_id($sql, 'bid', $data_insert));
             }
-            
+
             $nexturl .= '&runstep=6';
             ajax_respon('Thành công', 'text-success', $nexturl, 'Copy các dòng sự kiện');
         } elseif ($runstep == 6) {
             // bảng nv3_vi_news_topics
             $db->query("TRUNCATE " . NV_PREFIXLANG . "_" . $mod_data . "_topics");
-    
+
             $_sql = 'SELECT * FROM ' . NV_PREFIXLANG3 . '_' . $mod_data3 . '_topics';
             $_query = $db->query($_sql);
             while ($row = $_query->fetch()) {
@@ -468,20 +468,20 @@ if ($nv_Request->isset_request('mod_name', 'post,get')) {
                 $data_insert['edit_time'] = $row['edit_time'];
                 $topicid = intval($db->insert_id($sql, 'topicid', $data_insert));
             }
-            
+
             $nexturl .= '&runstep=7';
             ajax_respon('Thành công', 'text-success', $nexturl, 'Copy bình luận');
         } elseif ($runstep == 7) {
             // Bình luận
             $db->query("DELETE FROM " . NV_PREFIXLANG . "_comment WHERE module=" . $db->quote($mod_name));
-    
+
             $_sql = 'SELECT * FROM ' . NV_PREFIXLANG3 . '_' . $mod_data3 . '_comments';
             $_query = $db->query($_sql);
             while ($row = $_query->fetch()) {
                 $sql = "INSERT INTO " . NV_PREFIXLANG . "_comment
                 (cid, module, area, id, pid, content, post_time, userid, post_name, post_email, post_ip, status, likes, dislikes)
                 VALUES (:cid,:module,:area,:id,:pid,:content,:post_time,:userid,:post_name,:post_email,:post_ip,:status,:likes,:dislikes)";
-    
+
                 $data_insert = array();
                 $data_insert['cid'] = $row['cid'];
                 $data_insert['module'] = $mod_name;
@@ -497,10 +497,10 @@ if ($nv_Request->isset_request('mod_name', 'post,get')) {
                 $data_insert['status'] = $row['status'];
                 $data_insert['likes'] = 0;
                 $data_insert['dislikes'] = 0;
-    
+
                 $cid = intval($db->insert_id($sql, 'cid', $data_insert));
             }
-            
+
             $nexturl .= '&runstep=8';
             ajax_respon('Thành công', 'text-success', $nexturl, 'Copy nội dung chi tiết tin');
         } elseif ($runstep == 8) {
@@ -510,12 +510,12 @@ if ($nv_Request->isset_request('mod_name', 'post,get')) {
             while ($item = $result->fetch()) {
                 $array_table[] = $item['name'];
             }
-            
+
             if (isset($array_table[$runoffset])) {
                 $db->query("INSERT " . NV_PREFIXLANG . "_" . $mod_data . "_detail (
                     id, bodyhtml, sourcetext, imgposition, copyright, allowed_send, allowed_print, allowed_save
                 ) SELECT id, bodyhtml, sourcetext, imgposition, copyright, allowed_send, allowed_print, allowed_save FROM " . $array_table[$runoffset]);
-                
+
                 $runoffset ++;
                 $nexturl .= '&runstep=8&runoffset=' . $runoffset;
                 ajax_respon('Thành công', 'text-success', $nexturl, 'Tiếp tục copy nội dung thi tiết tin');
@@ -525,7 +525,7 @@ if ($nv_Request->isset_request('mod_name', 'post,get')) {
             }
         } elseif ($runstep == 9) {
             $nv_Cache->delMod($mod_name);
-            
+
             $nexturl .= '&runstep=9';
             ajax_respon('<a href="' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $mod_name, true) . '">Hoàn thành cập nhật, nhấp vào đây để xem kết quả</a>', 'text-success', '', '', 1);
         }
