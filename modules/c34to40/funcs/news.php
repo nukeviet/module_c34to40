@@ -159,6 +159,7 @@ if ($nv_Request->isset_request('mod_name', 'post,get')) {
         // Bước 1: Xóa dữ liệu module
         if ($runstep == 0) {
             // Xóa dữ liệu module hiện tại
+            $db->query("DROP TABLE IF EXISTS " . NV_PREFIXLANG . "_" . $mod_data . "_0");
             try {
                 $_query = $db->query("SELECT catid FROM " . NV_PREFIXLANG . "_" . $mod_data . "_cat WHERE 1");
                 while ($row = $_query->fetch()) {
@@ -178,7 +179,7 @@ if ($nv_Request->isset_request('mod_name', 'post,get')) {
         } elseif ($runstep == 1) {
             // Copy dữ liệu chủ đề
             require_once NV_ROOTDIR . '/includes/action_' . $db->dbtype . '.php';
-
+            nv_copy_structure_table(NV_PREFIXLANG . '_' . $mod_data . '_0', NV_PREFIXLANG . '_' . $mod_data . '_rows');
             try {
                 $db->query("INSERT " . NV_PREFIXLANG . "_" . $mod_data . "_cat (
                     catid, parentid, title, titlesite, alias, description, image, weight, sort, lev, viewcat, numsubcat, subcatid, inhome, numlinks, keywords,
@@ -211,8 +212,7 @@ if ($nv_Request->isset_request('mod_name', 'post,get')) {
             $nexturl .= '&runstep=2';
             ajax_respon('Thành công', 'text-success', $nexturl, 'Copy dữ liệu bài viết');
         } elseif ($runstep == 2) {
-            $limit_row = 2000;
-
+            $limit_row = 500;
             // Copy dữ liệu bài viết
             try {
                 $array_thumb_config = array();
