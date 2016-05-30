@@ -67,13 +67,13 @@ if ($nv_Request->isset_request('mod_name', 'post')) {
 
                 $db->query("INSERT " . NV_PREFIXLANG . "_" . $mod_data . "_categories (
                     id, parentid, title, alias, description, groups_view, groups_onlineview, groups_download, weight, status
-                ) SELECT id, parentid, title, alias, description, '" . $groups_view . "', '" . $groups_onlineview . "', '" . $groups_download . "', weight, status  
+                ) SELECT id, parentid, title, alias, description, '" . $groups_view . "', '" . $groups_onlineview . "', '" . $groups_download . "', weight, status
                     FROM " . NV_PREFIXLANG3 . "_" . $mod_data3 . "_categories WHERE id = " . $row['id']);
 
                 if ($row['parentid'] != 0) {
-                    $_sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_categories WHERE id = ' . $row['parentid'];
-                    $_query = $db->query($_sql);
-                    while ($_row = $_query->fetch()) {
+                    $_sub_sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_categories WHERE id = ' . $row['parentid'];
+                    $_sub_query = $db->query($_sub_sql);
+                    while ($_row = $_sub_query->fetch()) {
                         $_row['numsubcat'] = $_row['numsubcat'] + 1;
                         $_row['subcatid'] = ($_row['subcatid'] == '') ? $row['id'] : $_row['subcatid'] . ',' . $row['id'];
                         $db->query("UPDATE " . NV_PREFIXLANG . "_" . $mod_data . "_categories
@@ -85,7 +85,7 @@ if ($nv_Request->isset_request('mod_name', 'post')) {
         } catch (PDOException $e) {
             die($e->getMessage());
         }
-        
+
         // Chuyển bài đăng
         $db->query("TRUNCATE " . NV_PREFIXLANG . "_" . $mod_data);
         $db->query("TRUNCATE " . NV_PREFIXLANG . "_" . $mod_data . "_files");
@@ -97,7 +97,7 @@ if ($nv_Request->isset_request('mod_name', 'post')) {
         try {
             $_sql = 'SELECT * FROM ' . NV_PREFIXLANG3 . '_' . $mod_data3;
             $_query = $db->query($_sql);
-            
+
             while ($row = $_query->fetch()) {
                 if ($row['who_view'] == 1) {
                     $groups_view = '4';
@@ -131,18 +131,18 @@ if ($nv_Request->isset_request('mod_name', 'post')) {
                 $groups_onlineview = $groups_download;
                 $num_fileupload = 0;
                 $num_linkdirect = 0;
-                
+
                 // Copy fileupload
                 $fileupload = explode('[NV]', $row['fileupload']);
                 $weight = 1;
-                
+
                 foreach ($fileupload as $file) {
                     if (! empty($file)) {
                         $file2 = NV_UPLOADS_DIR . $file;
-                        
+
                         if (file_exists(NV_ROOTDIR . '/' . $file2) and ($filesize = filesize(NV_ROOTDIR . '/' . $file2)) != 0) {
                             $num_fileupload ++;
-                            
+
                             $sql = 'INSERT INTO ' . NV_PREFIXLANG . "_" . $mod_data . '_files (
                                 download_id, server_id, file_path, scorm_path, filesize, weight, status
                             ) VALUES (
@@ -156,22 +156,22 @@ if ($nv_Request->isset_request('mod_name', 'post')) {
                         }
                     }
                 }
-                
+
                 // Kiểm tra linkredirect
                 $linkdirect = explode('[NV]', $row['linkdirect']);
                 foreach ($linkdirect as $links) {
                     $links = array_filter(explode('<br />', $links));
                     $num_linkdirect += sizeof($links);
                 }
-                
+
                 // Copy detail
                 try {
                     $stmt = $db->prepare("INSERT INTO " . NV_PREFIXLANG . "_" . $mod_data . "_detail (
                         id, description, linkdirect, groups_comment, groups_view, groups_onlineview, groups_download, rating_detail
-                    ) VALUES( 
+                    ) VALUES(
                         " . $row['id'] . ", :description, :linkdirect, :groups_comment, :groups_view, :groups_onlineview, :groups_download, :rating_detail
                     )");
-                    
+
                     $stmt->bindParam(':description', $row['description'], PDO::PARAM_STR, strlen($row['description']));
                     $stmt->bindParam(':linkdirect', $row['linkdirect'], PDO::PARAM_STR, strlen($row['linkdirect']));
                     $stmt->bindParam(':groups_comment', $groups_comment, PDO::PARAM_STR);
@@ -183,12 +183,12 @@ if ($nv_Request->isset_request('mod_name', 'post')) {
                 } catch (PDOException $e) {
                     die($e->getMessage());
                 }
-                
+
                 $db->query("INSERT INTO " . NV_PREFIXLANG . "_" . $mod_data . "(
-                    id, catid, title, alias, introtext, uploadtime, updatetime, user_id, user_name, 
-                    author_name, author_email, author_url, version, filesize, fileimage, status, 
+                    id, catid, title, alias, introtext, uploadtime, updatetime, user_id, user_name,
+                    author_name, author_email, author_url, version, filesize, fileimage, status,
                     copyright, num_fileupload, num_linkdirect, view_hits, download_hits, comment_hits
-                ) SELECT id, catid, title, alias, introtext, uploadtime, updatetime, user_id, user_name, author_name, author_email, author_url, 
+                ) SELECT id, catid, title, alias, introtext, uploadtime, updatetime, user_id, user_name, author_name, author_email, author_url,
                  version, filesize, fileimage, status, copyright, " . $num_fileupload . ", " . $num_linkdirect . ", view_hits, download_hits,
                  comment_hits FROM " . NV_PREFIXLANG3 . "_" . $mod_data3 . " WHERE id = " . $row['id']);
             }
