@@ -182,9 +182,9 @@ if ($nv_Request->isset_request('mod_name', 'post,get')) {
             nv_copy_structure_table(NV_PREFIXLANG . '_' . $mod_data . '_0', NV_PREFIXLANG . '_' . $mod_data . '_rows');
             try {
                 $db->query("INSERT " . NV_PREFIXLANG . "_" . $mod_data . "_cat (
-                    catid, parentid, title, alias, description, image, weight, sort, lev, viewcat, numsubcat, subcatid, inhome, numlinks, keywords,
+                    catid, parentid, title, titlesite, alias, description, image, weight, sort, lev, viewcat, numsubcat, subcatid, inhome, numlinks, keywords,
                     admins, add_time, edit_time, groups_view
-                ) SELECT catid, parentid, title, alias, description, image, weight, `order`, lev, viewcat, numsubcat, subcatid, inhome, numlinks, keywords,
+                ) SELECT catid, parentid, title, titlesite, alias, description, image, weight, `order`, lev, viewcat, numsubcat, subcatid, inhome, numlinks, keywords,
                 admins, add_time, edit_time, groups_view FROM " . NV_PREFIXLANG3 . "_" . $mod_data3 . "_cat");
 
                 $db->query("INSERT " . NV_PREFIXLANG . "_" . $mod_data . "_admins ( userid, catid, admin, add_content, pub_content, edit_content, del_content)
