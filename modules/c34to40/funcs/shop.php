@@ -87,7 +87,7 @@ function c_shop( $mod_name, $nv3_shop )
 		}
 
 		$db->query( 'TRUNCATE ' . $nv4_table_name . '_catalogs' );
-		$_query = $db->query( 'SELECT `catid`, `parentid`, `image`, `thumbnail`, `weight`, `order`, `lev`, `viewcat`, `numsubcat`, `subcatid`, `inhome`, `numlinks`, `admins`, `add_time`, `edit_time`, `who_view`, `groups_view`, `vi_title`, `vi_alias`, `vi_description`, `vi_keywords` FROM `' . $nv3_table_name . '_catalogs`' );
+		$_query = $db->query( 'SELECT * FROM ' . $nv3_table_name . '_catalogs' );
 		while( $data = $_query->fetch( ) )
 		{
 			$data = array_map( 'unfixdb', $data );
@@ -99,8 +99,11 @@ function c_shop( $mod_name, $nv3_shop )
 			$data['cat_number_point'] = 0;
 			$data['cat_number_product'] = 0;
 
-			$sql = "INSERT INTO " . $nv4_table_name . '_catalogs' . " (catid, parentid, image, weight, sort, lev, viewcat, numsubcat, subcatid, inhome, numlinks, newday, typeprice, form, group_price,viewdescriptionhtml, admins, add_time, edit_time, groups_view, cat_allow_point, cat_number_point, cat_number_product " . $listfield . " )
-			VALUES (" . $data['catid'] . ", :parentid, :image," . $data['weight'] . ", " . $data['order'] . ", " . $data['lev'] . ", :viewcat, " . $data['numsubcat'] . ", :subcatid, '1', '4', :newday, :typeprice, :form, :group_price, :viewdescriptionhtml,:admins, " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", :groups_view, :cat_allow_point, :cat_number_point, :cat_number_product" . $listvalue . ")";
+			$sql = "INSERT INTO " . $nv4_table_name . '_catalogs' . " 
+			(catid, parentid, image, weight, sort, lev, viewcat, numsubcat, subcatid, inhome, numlinks, newday, typeprice, 
+			form, group_price,viewdescriptionhtml, admins, add_time, edit_time, groups_view, cat_allow_point, cat_number_point, 
+			cat_number_product " . $listfield . " )
+			VALUES (" . $data['catid'] . ", :parentid, :image," . $data['weight'] . ", " . $data['order'] . ", " . $data['lev'] . ",:viewcat, " . $data['numsubcat'] . ", :subcatid, '1', '4', :newday, :typeprice, :form, :group_price,:viewdescriptionhtml,:admins, " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", :groups_view, :cat_allow_point,:cat_number_point, :cat_number_product" . $listvalue . ")";
 			$data_insert = array( );
 			$data_insert['parentid'] = $data['parentid'];
 			$data_insert['image'] = $data['image'];
@@ -136,6 +139,10 @@ function c_shop( $mod_name, $nv3_shop )
 				{
 					$data_insert[$flang . '_' . $fname] = '';
 				}
+				elseif( $fname == 'title_custom' )
+				{
+					$data_insert[$flang . '_' . $fname] = $data[$flang . '_title'];
+				}
 				else
 				{
 					if( !isset( $data[$flang . '_' . $fname] ) )
@@ -148,10 +155,11 @@ function c_shop( $mod_name, $nv3_shop )
 					}
 				}
 			}
+			
 			$newcatid = intval( $db->insert_id( $sql, 'catid', $data_insert ) );
 			if( empty( $newcatid ) )
 			{
-				$err .= "Lỗi insert" . $nv4_table_name . '_catalogs' . " </br>";
+				$err .= "Lỗi insert: " . $nv4_table_name . '_catalogs' . " </br>";
 			}
 		}
 
@@ -408,7 +416,7 @@ function c_shop( $mod_name, $nv3_shop )
 		}
 
 		// Fetch Assoc
-		$_sql = 'SELECT `groupid`, `parentid`, `cateid`, `image`, `thumbnail`, `weight`, `order`, `lev`, `viewgroup`, `numsubgroup`, `subgroupid`, `inhome`, `numlinks`, `admins`, `add_time`, `edit_time`, `who_view`, `groups_view`, `numpro`, `vi_title`, `vi_alias`, `vi_description`, `vi_keywords` FROM `' . $nv3_table_name . '_group`';
+		$_sql = 'SELECT * FROM ' . $nv3_table_name . '_group';
 		$_query = $db->query( $_sql );
 
 		while( $row = $_query->fetch( ) )

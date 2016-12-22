@@ -43,3 +43,8 @@
 !/themes/default/images/c34to40/*
 !/themes/default/modules/c34to40
 !/themes/default/modules/c34to40/*
+/.gitattributes
+/CONTRIBUTING.md
+/assets
+/composer.json
+/vendor

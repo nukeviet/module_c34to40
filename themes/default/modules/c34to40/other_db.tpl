@@ -9,7 +9,8 @@
 
 <form action="{NV_BASE_SITEURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post">
 	<input type="hidden" name="save"  value="1" />
-	<input name="import" type="submit" value="Thực hiện nâng cấp">
+    <p><input type="checkbox" name="deletenv3" id="deletenv3" value="1"/> <label for="deletenv3">Xóa các bảng của NukeViet 3</label></p>
+	<input name="import" type="submit" value="Thực hiện nâng cấp" class="btn btn-success">
 </form>
 
 <p style="color: #D30000">
