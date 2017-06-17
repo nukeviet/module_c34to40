@@ -60,15 +60,19 @@ function c_user()
     $err = "";
     
     $num_items = $db->query($_sql)->fetchColumn();
-    if ($num_items == 0) {
+    if ($num_items == 7) {
         // neu chua co thi insert cac truong nay vao
-        $sql = "INSERT INTO " . NV4_PREFIX . "_users_field (fid, field, weight, field_type, field_choices, sql_choices, match_type, match_regex, func_callback, min_length, max_length, required, show_register, user_editable, show_profile, class, language, default_value) VALUES
-		(1, 'website', 1, 'textbox', '', '', 'none', '', '', 0, 255, 0, 1, 1, 1, 'input', 'a:1:{s:2:\"vi\";a:2:{i:0;s:7:\"website\";i:1;s:0:\"\";}}', ''),
-		(2, 'location', 2, 'textbox', '', '', 'none', '', '', 0, 255, 0, 1, 1, 1, 'input', 'a:1:{s:2:\"vi\";a:2:{i:0;s:12:\"Địa chỉ\";i:1;s:0:\"\";}}', ''),
-		(3, 'yim', 3, 'textbox', '', '', 'none', '', '', 0, 255, 0, 1, 1, 1, 'input', 'a:1:{s:2:\"vi\";a:2:{i:0;s:5:\"yahoo\";i:1;s:0:\"\";}}', ''),
-		(4, 'mobile', 4, 'textbox', '', '', 'none', '', '', 0, 100, 0, 1, 1, 1, 'input', 'a:1:{s:2:\"vi\";a:2:{i:0;s:6:\"mobile\";i:1;s:0:\"\";}}', ''),
-		(5, 'fax', 5, 'textbox', '', '', 'none', '', '', 0, 100, 0, 1, 1, 1, 'input', 'a:1:{s:2:\"vi\";a:2:{i:0;s:3:\"fax\";i:1;s:0:\"\";}}', ''),
-		(6, 'telephone', 6, 'textbox', '', '', 'none', '', '', 0, 100, 0, 1, 1, 1, 'input', 'a:1:{s:2:\"vi\";a:2:{i:0;s:9:\"telephone\";i:1;s:0:\"\";}}', '')";
+        $sql = "INSERT INTO " . NV4_PREFIX . "_users_field (
+            fid, field, weight, field_type, field_choices, sql_choices, match_type, match_regex, func_callback, min_length, max_length, 
+            required, show_register, user_editable, show_profile, class, language, default_value
+        ) VALUES
+            (8, 'website', 1, 'textbox', '', '', 'none', '', '', 0, 255, 0, 1, 1, 1, 'input', 'a:1:{s:2:\"vi\";a:2:{i:0;s:7:\"website\";i:1;s:0:\"\";}}', ''),
+            (9, 'location', 2, 'textbox', '', '', 'none', '', '', 0, 255, 0, 1, 1, 1, 'input', 'a:1:{s:2:\"vi\";a:2:{i:0;s:12:\"Địa chỉ\";i:1;s:0:\"\";}}', ''),
+            (10, 'yim', 3, 'textbox', '', '', 'none', '', '', 0, 255, 0, 1, 1, 1, 'input', 'a:1:{s:2:\"vi\";a:2:{i:0;s:5:\"yahoo\";i:1;s:0:\"\";}}', ''),
+            (11, 'mobile', 4, 'textbox', '', '', 'none', '', '', 0, 100, 0, 1, 1, 1, 'input', 'a:1:{s:2:\"vi\";a:2:{i:0;s:6:\"mobile\";i:1;s:0:\"\";}}', ''),
+            (12, 'fax', 5, 'textbox', '', '', 'none', '', '', 0, 100, 0, 1, 1, 1, 'input', 'a:1:{s:2:\"vi\";a:2:{i:0;s:3:\"fax\";i:1;s:0:\"\";}}', ''),
+            (13, 'telephone', 6, 'textbox', '', '', 'none', '', '', 0, 100, 0, 1, 1, 1, 'input', 'a:1:{s:2:\"vi\";a:2:{i:0;s:9:\"telephone\";i:1;s:0:\"\";}}', '')
+        ";
 
         try {
             $db->query($sql);
