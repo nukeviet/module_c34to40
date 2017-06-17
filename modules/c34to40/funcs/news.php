@@ -264,7 +264,9 @@ if ($nv_Request->isset_request('mod_name', 'post,get')) {
                         $homeimgthumb = 2;
                         $imagesize = getimagesize(NV_UPLOADS_REAL_DIR . '/' . $mod_name . '/' . $item['homeimgfile']);
                         if (!empty($imagesize)) {
-                            $ext1 = strtolower(array_pop(explode('.', $item['homeimgfile'])));
+                            $ext1 = explode('.', $item['homeimgfile']);
+                            $ext1 = array_pop($ext1);
+                            $ext1 = strtolower($ext1);
                             $ext2 = $typeflag[$imagesize[2]];
                             if ($ext1 != $ext2) {
                                 $homeimgfile = preg_replace("/." . $ext1 . "$/", '.' . $ext2, $item['homeimgfile']);

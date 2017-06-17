@@ -78,9 +78,15 @@ $(function(){
     $('#form-update').submit(function(e){
         e.preventDefault();
         var data = $('#form-update').serialize();
+        var action = $('#form-update').attr('action');
         $('#form-update').find('select').prop('disabled', true);
         $('<p>Tiến trình bắt đầu chạy</p>').insertAfter('#update-result-top');
-        controlRequest($('#form-update').attr('action') + data);
+        if (action.indexOf("&amp;") == -1 && action.indexOf("&") == -1) {
+            controlRequest(action + '?' + data);
+        } else {
+            controlRequest(action + data);
+        }
+        
     });
 })
 </script>
