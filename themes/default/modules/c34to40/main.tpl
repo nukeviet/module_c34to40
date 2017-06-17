@@ -15,7 +15,7 @@
 Ví dụ:
 <br/>
 <pre>
-	<code class="language-javascript">
+    <code class="language-javascript">
 function nv_del_content(id)
 {
     if(confirm(nv_is_del_confirm[0]))
@@ -42,35 +42,35 @@ function nv_del_content_result(res)
     }
     return false;
 }
-	</code>
+    </code>
 </pre>
 Cần được thay thành
 <pre>
-	<code class="language-javascript">
+    <code class="language-javascript">
 function nv_del_content(id)
 {
     if(confirm(nv_is_del_confirm[0]))
     {
-		$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=list&nocache=' + new Date().getTime(), 'action=delete&listid=' + id + '&checkss=' + checkss, function(res) {
-		    var r_split = res.split("_");
-		    if(r_split[0] == 'OK')
-		    {
-		        window.location.href = script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=list';
-		    }
-		    else if(r_split[0] == 'ERR')
-		    {
-		        alert(r_split[1]);
-		    }
-		    else
-		    {
-		        alert(nv_is_del_confirm[2]);
-		    }
-		    return false;
-		});
+        $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=list&nocache=' + new Date().getTime(), 'action=delete&listid=' + id + '&checkss=' + checkss, function(res) {
+            var r_split = res.split("_");
+            if(r_split[0] == 'OK')
+            {
+                window.location.href = script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=list';
+            }
+            else if(r_split[0] == 'ERR')
+            {
+                alert(r_split[1]);
+            }
+            else
+            {
+                alert(nv_is_del_confirm[2]);
+            }
+            return false;
+        });
     }
     return false;
 }
-	</code>
+    </code>
 </pre>
 
 <br/>
@@ -100,16 +100,31 @@ function nv_del_content(id)
 
 9) Chú ý đường dẫn trong admin. Ở phiên bản mới đã được thêm vào biến lang. Ví dụ
 <pre>
-	<code class="language-html">"{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}=upload&amp;popup=1&amp;area=logo&amp;path={IMG_DIR}&amp;type=image"</code>
+    <code class="language-html">"{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}=upload&amp;popup=1&amp;area=logo&amp;path={IMG_DIR}&amp;type=image"</code>
 </pre>
 Cần được thay thành
 <pre>
-	<code class="language-html">"{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}=upload&amp;popup=1&amp;area=logo&amp;path={IMG_DIR}&amp;type=image"</code>
+    <code class="language-html">"{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}=upload&amp;popup=1&amp;area=logo&amp;path={IMG_DIR}&amp;type=image"</code>
 </pre>
+
+<br/>
+10) Tìm trong các file php chỗ nào có các biến sau ở trong hàm cần gọi global biến $global_config nếu chưa gọi
+
+<pre>
+    <code class="language-php">
+$global_config['dir_forum']
+$global_config['nv_unickmax']
+$global_config['nv_unickmin']
+$global_config['nv_upassmax']
+$global_config['nv_upassmin']
+    </code>
+</pre>
+
+11) Để tối ưu module, cần đọc kỹ lại các tài liệu hướng dẫn nâng cấp module ở đây để bổ sung thêm các chức năng và tối ưu cho phiên bản NukeViet mới: <a href="https://github.com/nukeviet/update/wiki" target="_blank">https://github.com/nukeviet/update/wiki</a>
 
 <p><strong>Chi tiết các file được thay đổi:</strong></p>
 <pre>
-	<code class="language-xml">{DATA}</code>
+    <code class="language-xml">{DATA}</code>
 </pre>
 
 <!-- END: main -->
