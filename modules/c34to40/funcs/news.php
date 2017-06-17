@@ -532,8 +532,12 @@ if ($nv_Request->isset_request('mod_name', 'post,get')) {
         ajax_respon('Không tồn tại module cần nâng cấp', 'text-danger');
     }
 } else {
-    $result = $db->query('SELECT title, module_data, custom_title FROM ' . NV3_PREFIX . '_' . NV_LANG_DATA . '_modules WHERE module_file="news"');
-    $array_nv3_news = $result->fetchAll();
+    try {
+        $result = $db->query('SELECT title, module_data, custom_title FROM ' . NV3_PREFIX . '_' . NV_LANG_DATA . '_modules WHERE module_file="news"');
+        $array_nv3_news = $result->fetchAll();
+    } catch (PDOException $e) {
+        trigger_error(trigger_error($e->getMessage()));
+    }
 
     $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);
