@@ -380,6 +380,18 @@ function nv_fomat_dir($dirname, &$contents)
 
                 // Xóa thẻ đóng php
                 $output_data = preg_replace('/(\s*\?>\s*)\z$/', '', $output_data);
+                
+                // Các thay đổi NukeViet 4.1 Final
+                $output_data = str_replace('$page_title = $module_info[\'custom_title\'];', '$page_title = $module_info[\'site_title\'];', $output_data);
+                $output_data = str_replace('$page_title=$module_info[\'custom_title\'];', '$page_title = $module_info[\'site_title\'];', $output_data);
+                $output_data = str_replace('DIR_FORUM', '$global_config[\'dir_forum\']', $output_data);
+                $output_data = str_replace('NV_UNICKMAX', '$global_config[\'nv_unickmax\']', $output_data);
+                $output_data = str_replace('NV_UNICKMIN', '$global_config[\'nv_unickmin\']', $output_data);
+                $output_data = str_replace('NV_UPASSMAX', '$global_config[\'nv_upassmax\']', $output_data);
+                $output_data = str_replace('NV_UPASSMIN', '$global_config[\'nv_upassmin\']', $output_data);
+                
+                $output_data = str_replace('themes/\' . $module_info[\'template\'] . \'/modules/\' . $module_file', 'themes/\' . $module_info[\'template\'] . \'/modules/\' . $module_info[\'module_theme\']', $output_data);
+                $output_data = str_replace('themes/\' . $module_info[\'template\'] . \'/images/\' . $module_file', 'themes/\' . $module_info[\'template\'] . \'/images/\' . $module_info[\'module_theme\']', $output_data);
 
                 if ($output_data != $contents_file) {
                     file_put_contents(NV_ROOTDIR . '/' . $dirname . '/' . $file, trim($output_data), LOCK_EX);
@@ -400,21 +412,12 @@ function nv_fomat_dir($dirname, &$contents)
                     rename(NV_ROOTDIR . '/' . $dirname . '/' . $file, NV_ROOTDIR . '/' . $dirname . '/action_mysql.php');
                 }
                 
-                // Các thay đổi NukeViet 4.1 Final
-                $output_data = str_replace('$page_title = $module_info[\'custom_title\'];', '$page_title = $module_info[\'site_title\'];', $output_data);
-                $output_data = str_replace('$page_title=$module_info[\'custom_title\'];', '$page_title = $module_info[\'site_title\'];', $output_data);
-                $output_data = str_replace('DIR_FORUM', '$global_config[\'dir_forum\']', $output_data);
-                $output_data = str_replace('NV_UNICKMAX', '$global_config[\'nv_unickmax\']', $output_data);
-                $output_data = str_replace('NV_UNICKMIN', '$global_config[\'nv_unickmin\']', $output_data);
-                $output_data = str_replace('NV_UPASSMAX', '$global_config[\'nv_upassmax\']', $output_data);
-                $output_data = str_replace('NV_UPASSMIN', '$global_config[\'nv_upassmin\']', $output_data);
-                
-                $output_data = str_replace('themes/\' . $module_info[\'template\'] . \'/modules/\' . $module_file', 'themes/\' . $module_info[\'template\'] . \'/modules/\' . $module_info[\'module_theme\']', $output_data);
-                $output_data = str_replace('themes/\' . $module_info[\'template\'] . \'/images/\' . $module_file', 'themes/\' . $module_info[\'template\'] . \'/images/\' . $module_info[\'module_theme\']', $output_data);
-                
             } elseif (preg_match('/^([a-zA-Z0-9\-\_\/\.]+)\.js$/', $file) or preg_match('/^([a-zA-Z0-9\-\_\/\.]+)\.css/', $file)) {
                 $contents_file = file_get_contents(NV_ROOTDIR . '/' . $dirname . '/' . $file);
                 $output_data = trim($contents_file);
+                
+                // Cập nhật 4.1 Final
+                $output_data = preg_replace("/\\$\(\s*window\s*\)\.load\s*\(/i", "\$(window).on('load', ", $output_data);
 
                 if (preg_match("/^\/\*\*[\s\t\r\n]+([^\#]+)[\s\t\r\n]+\*\/[\s\t\r\n]+/", $output_data, $m)) {
                     $new = str_replace('createdate', 'Createdate', $m[0]);
@@ -589,6 +592,9 @@ function nv_fomat_dir($dirname, &$contents)
                 $output_data = str_replace('<th style="width:50px;">', '<th class="w100">', $output_data);
                 $output_data = str_replace('<th style="width:100px;">', '<th class="w100">', $output_data);
                 $output_data = str_replace('class="form-control txt-full"', 'class="form-control"', $output_data);
+                
+                // Cập nhật 4.1 Final
+                $output_data = preg_replace("/\\$\(\s*window\s*\)\.load\s*\(/i", "\$(window).on('load', ", $output_data);
 
                 $output_data = trim($output_data);
 
