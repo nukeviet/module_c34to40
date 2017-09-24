@@ -24,11 +24,11 @@ if ($nv_Request->isset_request('mod_name', 'post')) {
             $_sql = 'SELECT * FROM ' . NV_PREFIXLANG3 . '_' . $mod_data3;
             $_query = $db->query($_sql);
             while ($row = $_query->fetch()) {
-                $db->query("INSERT INTO " . NV_PREFIXLANG . "_" . $mod_data . "
+                $sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $mod_data . "
 				(id, title, alias, image, imagealt,imageposition, description, bodytext, keywords, socialbutton, 
 				activecomm, layout_func, gid, weight, admin_id, add_time, edit_time, status)
 		        VALUES (:id,:title,:alias,:image,:imagealt,:imageposition,:description,:bodytext,:keywords,:socialbutton, 
-				:activecomm,:layout_func,:gid,:weight,:admin_id,:add_time,:edit_time,:status)");
+				:activecomm,:layout_func,:gid,:weight,:admin_id,:add_time,:edit_time,:status)";
 
                 $data_insert = array();
                 $data_insert['id'] = $row['id'];
