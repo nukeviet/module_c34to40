@@ -87,9 +87,9 @@ function c_shop($mod_name, $nv3_shop)
             $data['cat_number_point'] = 0;
             $data['cat_number_product'] = 0;
 
-            $sql = "INSERT INTO " . $nv4_table_name . '_catalogs' . " 
-			(catid, parentid, image, weight, sort, lev, viewcat, numsubcat, subcatid, inhome, numlinks, newday, typeprice, 
-			form, group_price,viewdescriptionhtml, admins, add_time, edit_time, groups_view, cat_allow_point, cat_number_point, 
+            $sql = "INSERT INTO " . $nv4_table_name . '_catalogs' . "
+			(catid, parentid, image, weight, sort, lev, viewcat, numsubcat, subcatid, inhome, numlinks, newday, typeprice,
+			form, group_price,viewdescriptionhtml, admins, add_time, edit_time, groups_view, cat_allow_point, cat_number_point,
 			cat_number_product " . $listfield . " )
 			VALUES (" . $data['catid'] . ", :parentid, :image," . $data['weight'] . ", " . $data['order'] . ", " . $data['lev'] . ",:viewcat, " . $data['numsubcat'] . ", :subcatid, '1', '4', :newday, :typeprice, :form, :group_price,:viewdescriptionhtml,:admins, " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", :groups_view, :cat_allow_point,:cat_number_point, :cat_number_product" . $listvalue . ")";
             $data_insert = array();
@@ -188,6 +188,8 @@ function c_shop($mod_name, $nv3_shop)
 
         $_query = $db->query("SELECT id, listcatid, group_id, user_id, source_id, addtime, edittime, status, publtime, exptime, archive, product_number, product_price, product_discounts, money_unit, product_unit, homeimgfile, homeimgthumb, homeimgalt, otherimage, imgposition, copyright, inhome, allowed_comm, allowed_rating, ratingdetail, allowed_send, allowed_print, allowed_save, hitstotal, hitscm, hitslm, showprice, vi_title, vi_alias, vi_description, vi_keywords, vi_note, vi_hometext, vi_bodytext, vi_address, vi_warranty, vi_promotional FROM " . $nv3_table_name . "_rows");
         while ($row = $_query->fetch()) {
+            $row['vi_tag_title'] = '';
+            $row['vi_tag_description'] = '';
             $sql = "INSERT INTO " . $nv4_table_name . '_rows' . " (id, listcatid, user_id, addtime, edittime,
 		status, publtime, exptime, archive, product_code, product_number, product_price,
 		price_config, money_unit, product_unit, product_weight, weight_unit, discount_id,
@@ -250,8 +252,8 @@ function c_shop($mod_name, $nv3_shop)
 
             //kiểm tra ảnh thumb
             $data_insert['homeimgthumb'] = 0;
-            if (!empty($row['homeimgfile']) and !nv_is_url($row['homeimgfile']) and is_file(NV_DOCUMENT_ROOT . '/uploads/shops/' . $row['homeimgfile'])) {
-                if (file_exists(NV_ROOTDIR . '/' . NV_FILES_DIR . '/shops/' . $row['homeimgfile'])) {
+            if (!empty($row['homeimgfile']) and !nv_is_url($row['homeimgfile']) and is_file(NV_DOCUMENT_ROOT . '/uploads/' . $mod_name . '/' . $row['homeimgfile'])) {
+                if (file_exists(NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $mod_name . '/' . $row['homeimgfile'])) {
                     $data_insert['homeimgthumb'] = 1;
                 } else {
                     $data_insert['homeimgthumb'] = 2;
