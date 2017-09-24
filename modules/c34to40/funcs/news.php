@@ -3,8 +3,7 @@
 /**
  * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC.
- * All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate Thu, 09 Jan 2014 10:18:48 GMT
  */
@@ -265,7 +264,9 @@ if ($nv_Request->isset_request('mod_name', 'post,get')) {
                         $homeimgthumb = 2;
                         $imagesize = getimagesize(NV_UPLOADS_REAL_DIR . '/' . $mod_name . '/' . $item['homeimgfile']);
                         if (!empty($imagesize)) {
-                            $ext1 = strtolower(array_pop(explode('.', $item['homeimgfile'])));
+                            $ext1 = explode('.', $item['homeimgfile']);
+                            $ext1 = array_pop($ext1);
+                            $ext1 = strtolower($ext1);
                             $ext2 = $typeflag[$imagesize[2]];
                             if ($ext1 != $ext2) {
                                 $homeimgfile = preg_replace("/." . $ext1 . "$/", '.' . $ext2, $item['homeimgfile']);
@@ -533,8 +534,12 @@ if ($nv_Request->isset_request('mod_name', 'post,get')) {
         ajax_respon('Không tồn tại module cần nâng cấp', 'text-danger');
     }
 } else {
-    $result = $db->query('SELECT title, module_data, custom_title FROM ' . NV3_PREFIX . '_' . NV_LANG_DATA . '_modules WHERE module_file="news"');
-    $array_nv3_news = $result->fetchAll();
+    try {
+        $result = $db->query('SELECT title, module_data, custom_title FROM ' . NV3_PREFIX . '_' . NV_LANG_DATA . '_modules WHERE module_file="news"');
+        $array_nv3_news = $result->fetchAll();
+    } catch (PDOException $e) {
+        trigger_error(trigger_error($e->getMessage()));
+    }
 
     $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);
