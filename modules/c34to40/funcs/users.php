@@ -48,7 +48,7 @@ include NV_ROOTDIR . '/includes/footer.php';
 
 /**
  * c_user()
- * 
+ *
  * @return
  */
 function c_user()
@@ -58,12 +58,12 @@ function c_user()
     // Kiểm tra xem các trường của bảng nv3 đã được tạo trong bảng nv4_users_field hay chưa
     $_sql = 'SELECT count(*) FROM ' . NV4_PREFIX . '_users_field';
     $err = "";
-    
+
     $num_items = $db->query($_sql)->fetchColumn();
     if ($num_items == 7) {
         // neu chua co thi insert cac truong nay vao
         $sql = "INSERT INTO " . NV4_PREFIX . "_users_field (
-            fid, field, weight, field_type, field_choices, sql_choices, match_type, match_regex, func_callback, min_length, max_length, 
+            fid, field, weight, field_type, field_choices, sql_choices, match_type, match_regex, func_callback, min_length, max_length,
             required, show_register, user_editable, show_profile, class, language, default_value
         ) VALUES
             (8, 'website', 8, 'textbox', '', '', 'none', '', '', 0, 255, 0, 1, 1, 1, 'input', 'a:1:{s:2:\"vi\";a:2:{i:0;s:7:\"website\";i:1;s:0:\"\";}}', ''),
@@ -95,7 +95,7 @@ function c_user()
             $err .= "Lỗi bảng " . NV4_PREFIX . "_users_info<br />";
         }
     }
-    
+
     $nv3_exists = true;
     try {
         $sql = 'SELECT * FROM ' . NV3_PREFIX . '_users';
@@ -104,12 +104,12 @@ function c_user()
         $nv3_exists = false;
         $err .= "Lỗi: Chưa import CSDL thành viên NukeViet 3 vào";
     }
-    
+
     if ($nv3_exists) {
         $db->exec('TRUNCATE TABLE ' . NV4_PREFIX . '_users_info');
         // Xóa dữ liệu bảng cũ đi
         $db->exec('TRUNCATE TABLE ' . NV4_PREFIX . '_users');
-    
+
         while ($row = $queryUsers->fetch()) {
             $sql = "INSERT INTO " . NV4_PREFIX . "_users(userid, group_id, username, md5username, password,
                 email, first_name, last_name, gender, photo, birthday, sig,
@@ -121,11 +121,11 @@ function c_user()
                 :passlostkey,:view_mail,:remember,:in_groups,:active,:checknum,:last_login,
                 :last_ip,:last_agent,:last_openid,:idsite
             )";
-            
+
             if (strlen($row['password']) == 32) {
                 $row['password'] = '{MD5}' . $row['password'];
             }
-            
+
             $data_insert = array();
             $data_insert['userid'] = $row['userid'];
             $data_insert['group_id'] = 0;
@@ -153,7 +153,7 @@ function c_user()
             $data_insert['last_agent'] = $row['last_agent'];
             $data_insert['last_openid'] = $row['last_openid'];
             $data_insert['idsite'] = $global_config['idsite'];
-            
+
             try {
                 $userid = intval($db->insert_id($sql, 'userid', $data_insert));
             } catch (PDOException $e) {
@@ -163,14 +163,14 @@ function c_user()
                 $userid = intval($db->insert_id($sql, 'userid', $data_insert));
                 $err .= '---->' . $row['username'] . '<br>';
             }
-            
+
             if (!empty($userid)) {
                 $sql_info = "INSERT INTO " . NV4_PREFIX . "_users_info(
                     userid, website, location, yim, telephone, fax, mobile
                 ) VALUES (
                     :userid,:website,:location,:yim,:telephone,:fax,:mobile
                 )";
-                
+
                 $data_insert_info = array();
                 $data_insert_info['userid'] = $userid;
                 $data_insert_info['website'] = $row['website'];
@@ -184,12 +184,16 @@ function c_user()
                 $err .= "Lỗi insert user: " . $userid . " </br>";
             }
         }
-    
+
         // Cập nhật dữ liệu quản trị.
         $db->exec('TRUNCATE TABLE ' . NV4_PREFIX . '_authors');
-        
+
         try {
-            $db->query('INSERT ' . NV4_PREFIX . '_authors SELECT * FROM ' . NV3_PREFIX . '_authors');
+            $db->query('INSERT ' . NV4_PREFIX . '_authors (
+                admin_id, editor, lev, files_level, position, addtime, edittime, is_suspend, susp_reason, check_num, last_login, last_ip, last_agent
+            ) SELECT
+                admin_id, editor, lev, files_level, position, addtime, edittime, is_suspend, susp_reason, check_num, last_login, last_ip, last_agent
+            FROM ' . NV3_PREFIX . '_authors');
         } catch (PDOException $e) {
             $err .= "Lỗi không tương thích cấu trúc của bảng quản trị, các tài khoản quản trị không được chuyển, vui lòng xem lại <br />";
         }
