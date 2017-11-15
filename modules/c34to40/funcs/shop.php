@@ -11,8 +11,14 @@
 if (!defined('NV_IS_MOD_C34TO40'))
     die('Stop!!!');
 
-$result = $db->query('SELECT title, module_data, custom_title FROM ' . NV3_PREFIX . '_' . NV_LANG_DATA . '_modules WHERE module_file="shops"');
-$array_nv3_shop = $result->fetchAll();
+$noNv3DB = false;
+$array_nv3_shop = array();
+try {
+    $result = $db->query('SELECT title, module_data, custom_title FROM ' . NV3_PREFIX . '_' . NV_LANG_DATA . '_modules WHERE module_file="shops"');
+    $array_nv3_shop = $result->fetchAll();
+} catch (PDOException $e) {
+    $noNv3DB = true;
+}
 
 $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);
@@ -49,6 +55,10 @@ if ($nv_Request->isset_request('mod_name', 'post')) {
             $xtpl->assign('ERR', 'Thực hiện xong!');
         }
     }
+}
+
+if ($noNv3DB) {
+    $xtpl->parse('main.error_modulenv3');
 }
 
 $xtpl->parse('main');

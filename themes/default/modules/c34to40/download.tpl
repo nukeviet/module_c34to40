@@ -19,6 +19,10 @@
 <br>
 <br>
 
+<!-- BEGIN: error_modulenv3 -->
+<div class="alert alert-danger">Lỗi: Chưa có CSDL NukeViet v3 được import.</div>
+<!-- END: error_modulenv3 -->
+
 <form class="form-horizontal" action="{NV_BASE_SITEURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post">
 	<input type="hidden" name="save"  value="1" />
 	<input type="hidden" name="id" value="{DATA.id}" />

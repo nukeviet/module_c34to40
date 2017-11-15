@@ -17,6 +17,10 @@
 <br>
 <br>
 
+<!-- BEGIN: error_modulenv3 -->
+<div class="alert alert-danger">Lỗi: Chưa có CSDL NukeViet v3 được import.</div>
+<!-- END: error_modulenv3 -->
+
 <form id="form-update" class="form-horizontal" action="{NV_BASE_SITEURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}&amp;" method="post">
 	<div class="form-group">
 		<label class="col-sm-4 control-label">Bảng dữ liệu NukeViet 3</label>
@@ -86,7 +90,7 @@ $(function(){
         } else {
             controlRequest(action + data);
         }
-        
+
     });
 })
 </script>

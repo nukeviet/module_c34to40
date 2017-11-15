@@ -43,3 +43,5 @@
 /.settings/
 /.buildpath
 /error.php
+/.github/CONTRIBUTING.md
+/.github/ISSUE_TEMPLATE.md

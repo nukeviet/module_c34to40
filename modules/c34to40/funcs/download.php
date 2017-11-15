@@ -234,10 +234,12 @@ if ($nv_Request->isset_request('mod_name', 'post')) {
     }
 } else {
     $array_nv3_download = array();
+    $noNv3DB = false;
     try {
         $result = $db->query('SELECT title, module_data, custom_title FROM ' . NV3_PREFIX . '_' . NV_LANG_DATA . '_modules WHERE module_file="download"');
         $array_nv3_download = $result->fetchAll();
     } catch (PDOException $e) {
+        $noNv3DB = true;
     }
 
     $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
@@ -261,6 +263,10 @@ if ($nv_Request->isset_request('mod_name', 'post')) {
             $xtpl->assign('NV3_DOWNLOAD', $nv3_download);
             $xtpl->parse('main.nv3_download');
         }
+    }
+
+    if ($noNv3DB) {
+        $xtpl->parse('main.error_modulenv3');
     }
 
     $xtpl->parse('main');

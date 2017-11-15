@@ -181,7 +181,7 @@ if ($nv_Request->isset_request('mod_name', 'post,get')) {
             nv_copy_structure_table(NV_PREFIXLANG . '_' . $mod_data . '_0', NV_PREFIXLANG . '_' . $mod_data . '_rows');
             try {
                 $db->query("INSERT " . NV_PREFIXLANG . "_" . $mod_data . "_cat (
-                    catid, parentid, title, titlesite, alias, description, image, weight, sort, lev, viewcat, numsubcat, subcatid, inhome, numlinks, keywords,
+                    catid, parentid, title, titlesite, alias, description, image, weight, sort, lev, viewcat, numsubcat, subcatid, status, numlinks, keywords,
                     admins, add_time, edit_time, groups_view
                 ) SELECT catid, parentid, title, titlesite, alias, description, image, weight, `order`, lev, viewcat, numsubcat, subcatid, inhome, numlinks, keywords,
                 admins, add_time, edit_time, groups_view FROM " . NV_PREFIXLANG3 . "_" . $mod_data3 . "_cat");
@@ -201,7 +201,13 @@ if ($nv_Request->isset_request('mod_name', 'post,get')) {
                     } else {
                         $groups_view = '6';
                     }
-                    $db->query("UPDATE " . NV_PREFIXLANG . "_" . $mod_data . "_cat SET viewdescription = 0, newday = 3, groups_view = " . $groups_view . " WHERE catid=" . $row['catid']);
+                    // Cập nhật lại inhome của cat thành status
+                    if ($row['inhome'] == 0) {
+                        $status = 2;
+                    } else {
+                        $status = 1;
+                    }
+                    $db->query("UPDATE " . NV_PREFIXLANG . "_" . $mod_data . "_cat SET viewdescription = 0, newday = 3, groups_view = " . $groups_view . ", status=" . $status . " WHERE catid=" . $row['catid']);
                     nv_copy_structure_table(NV_PREFIXLANG . '_' . $mod_data . '_' . $row['catid'], NV_PREFIXLANG . '_' . $mod_data . '_rows');
                 }
             } catch (PDOException $e) {
@@ -225,12 +231,16 @@ if ($nv_Request->isset_request('mod_name', 'post,get')) {
                     'thumb_quality' => 90
                 );
 
+                // Xác định thứ tự bài viết
+                $weightRow = $runoffset;
+
                 $db->sqlreset()->select('*')->from(NV_PREFIXLANG3 . '_' . $mod_data3 . '_rows')->order('id ASC')->limit($limit_row)->offset($runoffset);
                 $sql = $db->sql();
                 $result = $db->query($sql);
                 $num_rows = $result->rowCount();
 
                 while ($item = $result->fetch()) {
+                    $weightRow++;
                     $array_img = (!empty($item['homeimgthumb'])) ? explode("|", $item['homeimgthumb']) : $array_img = array("", "");
                     $homeimgthumb = 0;
 
@@ -284,11 +294,11 @@ if ($nv_Request->isset_request('mod_name', 'post,get')) {
 
                     $item['homeimgthumb'] = $homeimgthumb;
                     $stmt = $db->prepare("INSERT INTO " . NV_PREFIXLANG . "_" . $mod_data . "_rows (
-                        id, catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, status, publtime,
+                        id, catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, status, weight, publtime,
                         exptime, archive, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, inhome, allowed_comm,
                         allowed_rating, hitstotal, hitscm, total_rating, click_rating
                     ) VALUES (
-                        :id,:catid,:listcatid,:topicid,:admin_id,:author,:sourceid,:addtime,:edittime,:status,:publtime,:exptime,:archive,:title,
+                        :id,:catid,:listcatid,:topicid,:admin_id,:author,:sourceid,:addtime,:edittime,:status,:weight,:publtime,:exptime,:archive,:title,
                         :alias,:hometext,:homeimgfile,:homeimgalt,:homeimgthumb,:inhome,:allowed_comm,:allowed_rating,:hitstotal,:hitscm,:total_rating,:click_rating
                     )");
 
@@ -302,6 +312,7 @@ if ($nv_Request->isset_request('mod_name', 'post,get')) {
                     $stmt->bindParam(':addtime', $item['addtime'], PDO::PARAM_INT);
                     $stmt->bindParam(':edittime', $item['edittime'], PDO::PARAM_INT);
                     $stmt->bindParam(':status', $item['status'], PDO::PARAM_INT);
+                    $stmt->bindParam(':weight', $weightRow, PDO::PARAM_INT);
                     $stmt->bindParam(':publtime', $item['publtime'], PDO::PARAM_INT);
                     $stmt->bindParam(':exptime', $item['exptime'], PDO::PARAM_INT);
                     $stmt->bindParam(':archive', $item['archive'], PDO::PARAM_INT);
@@ -534,11 +545,12 @@ if ($nv_Request->isset_request('mod_name', 'post,get')) {
         ajax_respon('Không tồn tại module cần nâng cấp', 'text-danger');
     }
 } else {
+    $noNv3DB = false;
     try {
         $result = $db->query('SELECT title, module_data, custom_title FROM ' . NV3_PREFIX . '_' . NV_LANG_DATA . '_modules WHERE module_file="news"');
         $array_nv3_news = $result->fetchAll();
     } catch (PDOException $e) {
-        trigger_error(trigger_error($e->getMessage()));
+        $noNv3DB = true;
     }
 
     $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
@@ -562,6 +574,10 @@ if ($nv_Request->isset_request('mod_name', 'post,get')) {
             $xtpl->assign('NV3_NEWS', $nv3_news);
             $xtpl->parse('main.nv3_news');
         }
+    }
+
+    if ($noNv3DB) {
+        $xtpl->parse('main.error_modulenv3');
     }
 
     $xtpl->parse('main');
