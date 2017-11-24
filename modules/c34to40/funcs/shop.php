@@ -48,7 +48,7 @@ if ($nv_Request->isset_request('mod_name', 'post')) {
     $nv3_shop = $nv_Request->get_string('nv3_shop', 'post');
 
     if (isset($site_mods[$mod_name])) {
-        $result = c_shop($mod_name, $nv3_shop);
+        $result = c_shop($mod_name, $site_mods[$mod_name]['module_data'], $nv3_shop);
         if ($result != null) {
             $xtpl->assign('ERR', $result);
         } else {
@@ -68,13 +68,13 @@ include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);
 include NV_ROOTDIR . '/includes/footer.php';
 
-function c_shop($mod_name, $nv3_shop)
+function c_shop($mod_name, $mod_data, $nv3_shop)
 {
     global $global_config, $db;
     try {
         $err = "";
         $nv3_table_name = NV3_PREFIX . '_' . $nv3_shop;
-        $nv4_table_name = NV4_PREFIX . '_' . $mod_name;
+        $nv4_table_name = NV4_PREFIX . '_' . $mod_data;
 
         $field_lang = nv_file_table($nv4_table_name . '_catalogs');
         $listfield = '';
