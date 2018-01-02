@@ -21,8 +21,8 @@ function nv_theme_c34to40_main($data)
 {
     global $module_file, $lang_module, $module_info, $op, $my_head;
 
-    $my_head .= '<link href="' . NV_BASE_SITEURL . 'editors/ckeditor/plugins/codesnippet/lib/highlight/styles/github.css" rel="stylesheet">';
-    $my_head .= '<script src="' . NV_BASE_SITEURL . 'editors/ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js"></script>';
+    $my_head .= '<link href="' . NV_BASE_SITEURL . NV_EDITORSDIR . '/ckeditor/plugins/codesnippet/lib/highlight/styles/github.css" rel="stylesheet">';
+    $my_head .= '<script src="' . NV_BASE_SITEURL . NV_EDITORSDIR . '/ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js"></script>';
     $my_head .= '<script>hljs.initHighlightingOnLoad();</script>';
 
     $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);

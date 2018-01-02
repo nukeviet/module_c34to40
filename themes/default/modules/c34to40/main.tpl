@@ -16,28 +16,20 @@ Ví dụ:
 <br/>
 <pre>
     <code class="language-javascript">
-function nv_del_content(id)
-{
-    if(confirm(nv_is_del_confirm[0]))
-    {
+function nv_del_content(id) {
+    if (confirm(nv_is_del_confirm[0])) {
         nv_ajax('post', script_name, nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=list&action=delete&listid=' + id + '&checkss=' + checkss, '', 'nv_del_content_result');
     }
     return false;
 }
 
-function nv_del_content_result(res)
-{
+function nv_del_content_result(res) {
     var r_split = res.split("_");
-    if(r_split[0] == 'OK')
-    {
+    if (r_split[0] == 'OK') {
         window.location.href = script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=list';
-    }
-    else if(r_split[0] == 'ERR')
-    {
+    } else if (r_split[0] == 'ERR') {
         alert(r_split[1]);
-    }
-    else
-    {
+    } else {
         alert(nv_is_del_confirm[2]);
     }
     return false;
@@ -47,22 +39,15 @@ function nv_del_content_result(res)
 Cần được thay thành
 <pre>
     <code class="language-javascript">
-function nv_del_content(id)
-{
-    if(confirm(nv_is_del_confirm[0]))
-    {
+function nv_del_content(id) {
+    if (confirm(nv_is_del_confirm[0])) {
         $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=list&nocache=' + new Date().getTime(), 'action=delete&listid=' + id + '&checkss=' + checkss, function(res) {
             var r_split = res.split("_");
-            if(r_split[0] == 'OK')
-            {
+            if (r_split[0] == 'OK') {
                 window.location.href = script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=list';
-            }
-            else if(r_split[0] == 'ERR')
-            {
+            } else if (r_split[0] == 'ERR') {
                 alert(r_split[1]);
-            }
-            else
-            {
+            } else {
                 alert(nv_is_del_confirm[2]);
             }
             return false;
@@ -121,6 +106,9 @@ $global_config['nv_upassmin']
 </pre>
 
 11) Để tối ưu module, cần đọc kỹ lại các tài liệu hướng dẫn nâng cấp module ở đây để bổ sung thêm các chức năng và tối ưu cho phiên bản NukeViet mới: <a href="https://github.com/nukeviet/update/wiki" target="_blank">https://github.com/nukeviet/update/wiki</a>
+
+<br />
+<br />
 
 <p><strong>Chi tiết các file được thay đổi:</strong></p>
 <pre>

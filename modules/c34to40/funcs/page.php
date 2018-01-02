@@ -25,9 +25,9 @@ if ($nv_Request->isset_request('mod_name', 'post')) {
             $_query = $db->query($_sql);
             while ($row = $_query->fetch()) {
                 $sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $mod_data . "
-				(id, title, alias, image, imagealt,imageposition, description, bodytext, keywords, socialbutton, 
+				(id, title, alias, image, imagealt,imageposition, description, bodytext, keywords, socialbutton,
 				activecomm, layout_func, gid, weight, admin_id, add_time, edit_time, status)
-		        VALUES (:id,:title,:alias,:image,:imagealt,:imageposition,:description,:bodytext,:keywords,:socialbutton, 
+		        VALUES (:id,:title,:alias,:image,:imagealt,:imageposition,:description,:bodytext,:keywords,:socialbutton,
 				:activecomm,:layout_func,:gid,:weight,:admin_id,:add_time,:edit_time,:status)";
 
                 $data_insert = array();
@@ -68,6 +68,10 @@ if ($nv_Request->isset_request('mod_name', 'post')) {
 } else {
     $result = $db->query('SELECT title, module_data, custom_title FROM ' . NV3_PREFIX . '_' . NV_LANG_DATA . '_modules WHERE module_file="about"');
     $array_nv3_download = $result->fetchAll();
+
+    $my_head .= '<link href="' . NV_BASE_SITEURL . NV_EDITORSDIR . '/ckeditor/plugins/codesnippet/lib/highlight/styles/github.css" rel="stylesheet">';
+    $my_head .= '<script src="' . NV_BASE_SITEURL . NV_EDITORSDIR . '/ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js"></script>';
+    $my_head .= '<script>hljs.initHighlightingOnLoad();</script>';
 
     $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);

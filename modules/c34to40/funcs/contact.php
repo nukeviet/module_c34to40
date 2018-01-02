@@ -11,6 +11,10 @@
 if (!defined('NV_IS_MOD_C34TO40'))
     die('Stop!!!');
 
+$my_head .= '<link href="' . NV_BASE_SITEURL . NV_EDITORSDIR . '/ckeditor/plugins/codesnippet/lib/highlight/styles/github.css" rel="stylesheet">';
+$my_head .= '<script src="' . NV_BASE_SITEURL . NV_EDITORSDIR . '/ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js"></script>';
+$my_head .= '<script>hljs.initHighlightingOnLoad();</script>';
+
 $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
@@ -40,8 +44,8 @@ if ($nv_Request->isset_request('mod_name', 'post')) {
             $i = 1;
             while ($row = $_query->fetch()) {
                 $sql = "INSERT INTO " . NV_PREFIXLANG . '_' . $mod_name . "_department
-	            	(id, full_name, alias, image, phone, fax, email, address, note, 
-	            	others, cats, admins, act, weight, is_default) 
+	            	(id, full_name, alias, image, phone, fax, email, address, note,
+	            	others, cats, admins, act, weight, is_default)
 	            	VALUES (:id,:full_name,:alias,:image,:phone,:fax,:email,:address,
 	            	:note,:others,:cats,:admins,:act,:weight,:is_default)";
                 $data_insert = array();
@@ -78,8 +82,8 @@ if ($nv_Request->isset_request('mod_name', 'post')) {
             $_query = $db->query($_sql);
             while ($row = $_query->fetch()) {
                 $sql = "INSERT INTO " . NV_PREFIXLANG . '_' . $mod_name . "_send
-	            	(id, cid, cat, title, content, send_time, sender_id, sender_name, sender_email, 
-	            	sender_phone, sender_ip, is_read, is_reply) 
+	            	(id, cid, cat, title, content, send_time, sender_id, sender_name, sender_email,
+	            	sender_phone, sender_ip, is_read, is_reply)
 	            	VALUES (:id,:cid,:cat,:title,:content,:send_time,:sender_id,:sender_name,
 	            	:sender_email,:sender_phone,:sender_ip,:is_read,:is_reply)";
                 $data_insert = array();
@@ -99,7 +103,7 @@ if ($nv_Request->isset_request('mod_name', 'post')) {
                 $id = intval($db->insert_id($sql, 'id', $data_insert));
 
                 $sql = "INSERT INTO " . NV_PREFIXLANG . '_' . $mod_name . "_reply
-	            	(id, reply_content, reply_time, reply_aid) 
+	            	(id, reply_content, reply_time, reply_aid)
 	            	VALUES (:id,:reply_content,:reply_time,:reply_aid)";
                 $data_insert = array();
                 $data_insert['id'] = $row['id'];
