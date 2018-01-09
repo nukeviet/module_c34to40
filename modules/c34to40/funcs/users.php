@@ -113,9 +113,13 @@ function c_user()
         $db->exec('TRUNCATE TABLE ' . NV4_PREFIX . '_users_info');
         // Xóa dữ liệu bảng cũ đi
         $db->exec('TRUNCATE TABLE ' . NV4_PREFIX . '_users');
+        // Xóa hết các backupcode
+        $db->exec('TRUNCATE TABLE ' . NV4_PREFIX . '_users_backupcodes');
+        // Xóa hết các thiết lập nhóm
+        $db->exec('TRUNCATE TABLE ' . NV4_PREFIX . '_users_groups_users');
 
         while ($row = $queryUsers->fetch()) {
-            $sql = "INSERT INTO " . NV4_PREFIX . "_users(userid, group_id, username, md5username, password,
+            $sql = "INSERT INTO " . NV4_PREFIX . "_users (userid, group_id, username, md5username, password,
                 email, first_name, last_name, gender, photo, birthday, sig,
                 regdate, question, answer, passlostkey, view_mail, remember,
                 in_groups, active, checknum, last_login, last_ip, last_agent,
@@ -132,7 +136,7 @@ function c_user()
 
             $data_insert = array();
             $data_insert['userid'] = $row['userid'];
-            $data_insert['group_id'] = 0;
+            $data_insert['group_id'] = 4; // Mặc định là thành viên chính thức cả
             $data_insert['username'] = $row['username'];
             $data_insert['md5username'] = nv_md5safe($row['username']);
             $data_insert['password'] = $row['password'];
@@ -200,6 +204,24 @@ function c_user()
             FROM ' . NV3_PREFIX . '_authors');
         } catch (PDOException $e) {
             $err .= "Lỗi không tương thích cấu trúc của bảng quản trị, các tài khoản quản trị không được chuyển, vui lòng xem lại <br />";
+        }
+
+        // Cập nhật lại số lượng thành viên trong các nhóm bằng 0
+        $db->exec('UPDATE ' . NV4_PREFIX . '_users_groups SET numbers=0');
+
+        // Cập nhật lại số thành viên
+        $db->exec('UPDATE ' . NV4_PREFIX . '_users_groups SET numbers=(SELECT COUNT(*) FROM ' . NV4_PREFIX . '_users WHERE group_id=4) WHERE group_id=4');
+
+        // Cập nhật lại thống kê số lượng các quản trị site
+        $sql = "SELECT * FROM " . NV4_PREFIX . "_authors";
+        $result = $db->query($sql);
+        while ($row = $result->fetch()) {
+            $db->query("UPDATE " . NV4_PREFIX . "_users_groups SET numbers=numbers+1 WHERE group_id=" . $row['lev']);
+            $db->query("INSERT INTO " . NV4_PREFIX . "_users_groups_users (
+                group_id, userid, is_leader, approved, data
+            ) VALUES (
+                " . $row['lev'] . ", " . $row['admin_id'] . ", 0, 1, ''
+            )");
         }
     }
 
