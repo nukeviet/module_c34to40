@@ -110,8 +110,24 @@ function other()
 		" . $db->quote($row['last_update']) . ")";
             $db->query($sql);
         }
-    }
-    catch (PDOException $e) {
+
+        // Cập nhật lại quyền quản trị của các tài khoản quản lý module
+        $sql = "SELECT * FROM " . NV3_PREFIX . "_" . NV_LANG_DATA . "_modules";
+        $array_nv3_modules = array();
+
+        $result = $db->query($sql);
+        while ($row = $result->fetch()) {
+            $array_nv3_modules[$row['title'] . '_' . $row['module_file']] = $row['admins'];
+        }
+
+        $sql = "SELECT * FROM " . NV4_PREFIX . "_" . NV_LANG_DATA . "_modules";
+        $result = $db->query($sql);
+        while ($row = $result->fetch()) {
+            if (isset($array_nv3_modules[$row['title'] . '_' . $row['module_file']])) {
+                $db->query("UPDATE " . NV4_PREFIX . "_" . NV_LANG_DATA . "_modules SET admins='" . $array_nv3_modules[$row['title'] . '_' . $row['module_file']] . "' WHERE title='" . $row['title'] . "'");
+            }
+        }
+    } catch (PDOException $e) {
         trigger_error($e->getMessage());
     }
 }

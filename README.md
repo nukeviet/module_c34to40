@@ -40,6 +40,7 @@ Các bước thực hiện:
 - Chuyển dữ liệu bảng counter (lượt truy cập)
 - Chuyển dữ liệu bảng searchkeys (từ khóa tìm kiếm)
 - Chuyển dữ liệu bảng referer_stats (số liệu thống kê)
+- Cập nhật lại quyền quản trị của các tài khoản quản lý module. Lưu ý: Cài đặt và nâng cấp hết các module cần thiết trước sau đó mới chạy công cụ này; hệ thống sẽ chuyển quyền quản trị của các module cùng tên tương ứng với nhau ví dụ news nv3 sang news nv4
 - Truy cập đường dẫn http:/domain/c34to40/other_db/
 - Đợi đến khi nhận được thông báo thành công.
 
