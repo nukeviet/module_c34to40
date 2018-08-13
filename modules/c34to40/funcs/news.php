@@ -111,7 +111,7 @@ function nv_get_viewImage($fileName)
     } else {
         $size = @getimagesize(NV_ROOTDIR . '/' . $fileName);
         return array(
-            $viewFile,
+            $fileName,
             $size[0],
             $size[1]);
     }
@@ -525,8 +525,8 @@ if ($nv_Request->isset_request('mod_name', 'post,get')) {
 
             if (isset($array_table[$runoffset])) {
                 $db->query("INSERT " . NV_PREFIXLANG . "_" . $mod_data . "_detail (
-                    id, bodyhtml, sourcetext, imgposition, copyright, allowed_send, allowed_print, allowed_save
-                ) SELECT id, bodyhtml, sourcetext, imgposition, copyright, allowed_send, allowed_print, allowed_save FROM " . $array_table[$runoffset]);
+                    id, description, bodyhtml, sourcetext, imgposition, copyright, allowed_send, allowed_print, allowed_save
+                ) SELECT id, '', bodyhtml, sourcetext, imgposition, copyright, allowed_send, allowed_print, allowed_save FROM " . $array_table[$runoffset]);
 
                 $runoffset ++;
                 $nexturl .= '&runstep=8&runoffset=' . $runoffset;
