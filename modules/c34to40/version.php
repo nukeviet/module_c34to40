@@ -13,8 +13,8 @@ if (!defined('NV_MAINFILE'))
 
 $module_version = array(
     'name' => 'C34to40',
-    'modfuncs' => 'main,news,download,organs,laws,faqs,album,shop,users,other_db, page, contact',
-    'submenu' => 'main,news,download,organs,laws,faqs,album,shop,users,other_db, page, contact',
+    'modfuncs' => 'main,news,download,organs,laws,faqs,album,shop,users,other_db, page, contact,banners,weblinks',
+    'submenu' => 'main,news,download,organs,laws,faqs,album,shop,users,other_db, page, contact,banners,weblinks',
     'is_sysmod' => 0,
     'virtual' => 0,
     'version' => '4.0.29',
