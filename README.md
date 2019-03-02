@@ -36,7 +36,15 @@ Các bước thực hiện:
 - Chọn module lấy dữ liệu (Module của NukeViet 3), sau đó chọn module muốn nâng cấp (ở NukeViet 4), sau đó nhấn “Thực hiện nâng cấp”
 - Đợi đến khi nhận được thông báo thành công.
 
-## 5. Nâng cấp các loại dữ liệu khác
+## 5. Nâng cấp dữ liệu module weblinks
+- Truy cập đường dẫn http:/domain/c34to40/weblinks/
+- Làm theo hướng dẫn tại trang đó
+
+## 6. Nâng cấp dữ liệu module banners
+- Truy cập đường dẫn http:/domain/c34to40/banners/
+- Làm theo hướng dẫn tại trang đó
+
+## 7. Nâng cấp các loại dữ liệu khác
 - Chuyển dữ liệu bảng counter (lượt truy cập)
 - Chuyển dữ liệu bảng searchkeys (từ khóa tìm kiếm)
 - Chuyển dữ liệu bảng referer_stats (số liệu thống kê)
