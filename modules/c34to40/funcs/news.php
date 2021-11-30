@@ -302,6 +302,11 @@ if ($nv_Request->isset_request('mod_name', 'post,get')) {
                         :alias,:hometext,:homeimgfile,:homeimgalt,:homeimgthumb,:inhome,:allowed_comm,:allowed_rating,:hitstotal,:hitscm,:total_rating,:click_rating
                     )");
 
+                    // Phiên bản cũ có trường hợp alias dài hơn 250 ký tự do đó cần cắt bớt
+                    $item['alias'] = nv_substr($item['alias'], 0, 250);
+                    $item['alias'] = trim($item['alias'], '-');
+                    $item['alias'] = trim($item['alias']);
+
                     $stmt->bindParam(':id', $item['id'], PDO::PARAM_INT);
                     $stmt->bindParam(':catid', $item['catid'], PDO::PARAM_INT);
                     $stmt->bindParam(':listcatid', $item['listcatid'], PDO::PARAM_STR);
@@ -385,6 +390,7 @@ if ($nv_Request->isset_request('mod_name', 'post,get')) {
                     }
                 }
             } catch (PDOException $e) {
+                trigger_error(print_r($e, true));
                 ajax_respon('Lỗi copy bài viết', 'text-danger');
             }
 
@@ -403,7 +409,7 @@ if ($nv_Request->isset_request('mod_name', 'post,get')) {
             $_query = $db->query($_sql);
             while ($row = $_query->fetch()) {
                 $sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $mod_data . "_sources( sourceid,title, link, logo, weight, add_time, edit_time)
-    				VALUES (:sourceid,:title,:link,:logo,:weight,:add_time,:edit_time)";
+                    VALUES (:sourceid,:title,:link,:logo,:weight,:add_time,:edit_time)";
                 $data_insert = array();
                 $data_insert['sourceid'] = $row['sourceid'];
                 $data_insert['title'] = $row['title'];
@@ -440,7 +446,7 @@ if ($nv_Request->isset_request('mod_name', 'post,get')) {
             $_query = $db->query($_sql);
             while ($row = $_query->fetch()) {
                 $sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $mod_data . "_block_cat(bid, adddefault, numbers, title, alias, image, description, weight, keywords, add_time, edit_time)
-    				VALUES (:bid,:adddefault,:numbers,:title,:alias,:image,:description,:weight,:keywords,:add_time,:edit_time)";
+                    VALUES (:bid,:adddefault,:numbers,:title,:alias,:image,:description,:weight,:keywords,:add_time,:edit_time)";
                 $data_insert = array();
                 $data_insert['bid'] = $row['bid'];
                 $data_insert['adddefault'] = $row['adddefault'];
@@ -466,8 +472,8 @@ if ($nv_Request->isset_request('mod_name', 'post,get')) {
             $_query = $db->query($_sql);
             while ($row = $_query->fetch()) {
                 $sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $mod_data . "_topics
-                	(topicid, title, alias, image, description, weight, keywords, add_time, edit_time)
-    				VALUES (:topicid,:title,:alias,:image,:description,:weight,:keywords,:add_time,:edit_time)";
+                    (topicid, title, alias, image, description, weight, keywords, add_time, edit_time)
+                    VALUES (:topicid,:title,:alias,:image,:description,:weight,:keywords,:add_time,:edit_time)";
                 $data_insert = array();
                 $data_insert['topicid'] = $row['topicid'];
                 $data_insert['title'] = $row['title'];

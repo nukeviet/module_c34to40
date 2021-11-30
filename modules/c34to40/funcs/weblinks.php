@@ -22,19 +22,31 @@ if ($nv_Request->isset_request('mod_name', 'post')) {
         $db->query("TRUNCATE " . NV_PREFIXLANG . "_" . $mod_data . "_cat");
 
         // Copy nguyên chủ đề bản 3 sang
-        $db->query("INSERT INTO " . NV_PREFIXLANG . "_" . $mod_data . "_cat SELECT * FROM " . NV_PREFIXLANG3 . "_" . $mod_data3 . "_cat");
+        $db->query("INSERT INTO " . NV_PREFIXLANG . "_" . $mod_data . "_cat (
+            catid, parentid, title, catimage, alias, description, weight, inhome, keywords, add_time, edit_time
+        ) SELECT
+            catid, parentid, title, catimage, alias, description, weight, inhome, keywords, add_time, edit_time
+        FROM " . NV_PREFIXLANG3 . "_" . $mod_data3 . "_cat");
 
         // Xóa báo lỗi
         $db->query("TRUNCATE " . NV_PREFIXLANG . "_" . $mod_data . "_report");
 
         // Copy nguyên báo lỗi bản 3 sang
-        $db->query("INSERT INTO " . NV_PREFIXLANG . "_" . $mod_data . "_report SELECT * FROM " . NV_PREFIXLANG3 . "_" . $mod_data3 . "_report");
+        $db->query("INSERT INTO " . NV_PREFIXLANG . "_" . $mod_data . "_report (
+            id, type, report_time, report_ip, report_browse_key, report_browse_name, report_os_key, report_os_name, report_note
+        ) SELECT
+            id, type, report_time, report_ip, report_browse_key, report_browse_name, report_os_key, report_os_name, report_note
+        FROM " . NV_PREFIXLANG3 . "_" . $mod_data3 . "_report");
 
         // Xóa các liên kết
         $db->query("TRUNCATE " . NV_PREFIXLANG . "_" . $mod_data . "_rows");
 
         // Copy nguyên liên kết bản 3 sang
-        $db->query("INSERT INTO " . NV_PREFIXLANG . "_" . $mod_data . "_rows SELECT * FROM " . NV_PREFIXLANG3 . "_" . $mod_data3 . "_rows");
+        $db->query("INSERT INTO " . NV_PREFIXLANG . "_" . $mod_data . "_rows (
+            id, catid, title, alias, url, urlimg, description, add_time, edit_time, hits_total, status
+        ) SELECT
+            id, catid, title, alias, url, urlimg, description, add_time, edit_time, hits_total, status
+        FROM " . NV_PREFIXLANG3 . "_" . $mod_data3 . "_rows");
 
         $nv_Cache->delMod($mod_name);
         Header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $mod_name, true));

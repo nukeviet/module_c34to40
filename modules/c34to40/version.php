@@ -13,11 +13,11 @@ if (!defined('NV_MAINFILE'))
 
 $module_version = array(
     'name' => 'C34to40',
-    'modfuncs' => 'main,news,download,organs,laws,faqs,album,shop,users,other_db, page, contact,banners,weblinks',
-    'submenu' => 'main,news,download,organs,laws,faqs,album,shop,users,other_db, page, contact,banners,weblinks',
+    'modfuncs' => 'main,news,download,organs,laws,faqs,album,shop,users,other_db,page,contact,banners,weblinks,nvalbums,video',
+    'submenu' => 'main,news,download,organs,laws,faqs,album,shop,users,other_db,page,contact,banners,weblinks,nvalbums,video',
     'is_sysmod' => 0,
     'virtual' => 0,
-    'version' => '4.0.29',
+    'version' => '4.5.01',
     'date' => 'Fri, 20 May 2016 17:00:00 GMT',
     'author' => 'VINADES (contact@vinades.vn)',
     'uploads_dir' => array($module_name),

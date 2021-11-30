@@ -1,9 +1,9 @@
-# Hướng dẫn nâng cấp hệ thống từ NukeViet 3.4 lên NukeViet 4.3.00
+# Hướng dẫn nâng cấp hệ thống từ NukeViet 3.4 lên NukeViet 4.5.01
 
 Ở phiên bản NukeViet 4, nhân hệ thống thay đổi hoàn toàn so với NukeViet 3, do đó người dùng cần thay mới hoàn toàn code, không hỗ trợ nâng cấp module mà chỉ hỗ trợ chuyển đỗi dữ liệu các module hệ thống.
 
 Các bước thực hiện:
-- Cài đặt NukeViet 4 (phiên bản mới nhất) và đăng nhập quản trị tối cao. Chú ý: Chỉ cài mới hoàn toàn, tránh tùy chỉnh ở code mới. Sau khi nâng cấp xong mới thực hiện các thao tác chỉnh sửa khác.
+- Cài đặt NukeViet 4.5.01 và đăng nhập quản trị tối cao. Chú ý: Chỉ cài mới hoàn toàn, tránh tùy chỉnh ở code mới. Sau khi nâng cấp xong mới thực hiện các thao tác chỉnh sửa khác.
 - Import các bảng dữ liệu module NukeViet 3 vào CSDL chứa các bảng của NukeViet 4
 - Cài đặt module c34to40 bằng gói cài đặt (Hoặc download trên https://github.com/nukeviet/module_c34to40, giải nén và copy tương ứng với cấu trúc của NukeViet 4)
 - Mở modules/c34to40/function.php. Tìm đến dòng `define('NV3_PREFIX', 'nv3');` và thay `nv3` bằng tiếp đầu tố bảng dữ liệu NukeViet 3 của bạn.
