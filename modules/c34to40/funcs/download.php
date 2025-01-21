@@ -203,8 +203,8 @@ if ($nv_Request->isset_request('mod_name', 'post')) {
 
         while ($row = $result->fetch()) {
             $sql = "INSERT INTO " . NV_PREFIXLANG . "_comment
-            (cid, module, area, id, pid, content, post_time, userid, post_name, post_email, post_ip, status, likes, dislikes)
-            VALUES (:cid,:module,:area,:id,:pid,:content,:post_time,:userid,:post_name,:post_email,:post_ip,:status,:likes,:dislikes)";
+            (module, area, id, pid, content, post_time, userid, post_name, post_email, post_ip, status, likes, dislikes)
+            VALUES (:module,:area,:id,:pid,:content,:post_time,:userid,:post_name,:post_email,:post_ip,:status,:likes,:dislikes)";
 
             $data_insert = array();
             $data_insert['cid'] = $row['id'];
